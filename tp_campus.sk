@@ -1,0 +1,30 @@
+on region enter:
+    wait 3 ticks
+    #region은 무조건 소문자만 / warp는 대소문자 구분
+    #overGroundEntrance -> JungdoLounge
+    #중도 위쪽 밖 -> 중도 스타벅스
+    if "%region at player%" contains "overgroundentrance":
+        execute console command "/warp JungdoLounge %player%"
+    #overGroundExit -> JungdoRoadEntrance
+    #중도 스타벅스 -> 중도 위쪽 밖
+    else if "%region at player%" contains "overgroundexit":
+        execute console command "/warp JungdoRoadEntrance %player%"
+    #underGroundEntrance -> readingRoomEntrance
+    #중도 아래 밖 -> 중도 열람실
+    else if "%region at player%" contains "undergroundentrance":
+        execute console command "/warp readingRoomEntrance %player%"
+    #underGroundExit -> hongRoadEntrance
+    #중도 열람실 -> 중도 아래 밖
+    else if "%region at player%" contains "undergroundexit":
+        execute console command "/warp hongRoadEntrance %player%"
+    #libOutside -> libInWarp
+    #도서관 밖 -> 도서관 안
+    else if "%region at player%" contains "liboutside":
+        execute console command "/warp libInWarp %player%"
+    #libInside -> libOutWarp
+    #도서관 안 -> 도서관 밖
+    else if "%region at player%" contains "libinside":
+        execute console command "/warp libOutWarp %player%"
+    #캠퍼스 -> 야생
+    else if "%region at player%" contains "dokdo":
+        teleport player to spawn of "world"

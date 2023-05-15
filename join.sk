@@ -1,0 +1,24 @@
+on join:
+    #if player is not op:
+    #    broadcast "&c■ OP가 아닌 유저(%player%)&c의 접속으로 킥 처리합니다."
+    #    kick player due to "&c현재 준비 중이므로 오피가 아닌 유저는 킥 처리합니다."
+    #    stop
+
+    set {_ismember} to text from "http://mc.yu.ac.kr/ismember.php?uuid=%uuid of player%"
+    if "%{_ismember}%" contains "YESYESYES":
+
+        set {ismember1::%uuid of player%} to 1
+        message "&a■ 허가된 플레이어의 입장을 환영합니다!" to player
+        delete {nick::%uuid of player%}
+        if {nick::%uuid of player%} is not set:
+            set {_cb::*} to {_ismember} split at "///"
+            set {nick::%uuid of player%} to {_cb::2} 
+            execute console command "/nickname %player% %{nick::%uuid of player%}%"
+            execute console command "/tab player %player% customtabname %{nick::%uuid of player%}%&7(%player%)"
+            execute console command "/tab player %player% customtagname %{nick::%uuid of player%}%"
+    else:
+        broadcast "&c■ 허가되지 않은 플레이어(%player%)&c의 접속으로 킥 처리합니다."
+        kick player due to "&cYUMC 공식 홈페이지에서 회원가입(영대생 인증)이 필요한 플레이어입니다. 문제가 있는 경우 관리자에게 문의하세요."
+        stop
+    
+    

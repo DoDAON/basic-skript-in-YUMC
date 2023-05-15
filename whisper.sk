@@ -1,0 +1,52 @@
+# 귓속말 기능
+command /whisper [<text>] [<text>]:
+    description: User-to-user whispers
+    aliases: /w [<text>] [<text>]
+    trigger:
+        #TODO: 글자 가독성을 위한 꾸미기
+        if arg 2 is set:
+            loop all players:
+                if {nick::%uuid of loop-value%} is not set:
+                    set {_nickValue} to false
+                else:
+                    set {_nickValue} to true
+            #FIXME: how to know that the player is on-line? all players 가 그냥 접속 중인 사람인가?
+            if {_nickValue} is true:
+                #FIXME: nickname to uuid function
+                
+                # 귓속말을 받을 사람의 닉네임
+                set {_player} to #nick to uuid
+                
+                #나에게 표시
+                message "[%player%] > [%{_player}%] : %arg 2%" to player
+                #상대방에게 표시
+                message "[%player%] > [%{_player}%] : %arg 2%" to {_player}
+            else:
+                message "등록되지 않은 사용자입니다!" to player
+                #만약 all players 가 접속중 사람이면 "등록되지 않았거나 접속중이지 않은 유저입니다!" 로 바꾸기
+        else:
+            message "사용법: /w <유저 한글 이름> <할 말>" to player
+
+
+#TODO: 확성기 기능?
+#전체 공지하는 건 가능한데 중요한 건 소리는 어케 내는 거지?
+#생각나는 소리 내는 방법은 execute로 인게임 커맨드 작동하게 해서
+#파티클이랑 소리 명령어를 직접 실행하게 하는 것도 있는데 그러면
+#같이 있을 때 중첩해서 들려서 시끄러울려나?
+#추가로 확성기 쿨타임은 어떻게 구현하지?
+#딜레이 줘서 계속 시간 측정해야 하나? 궁금
+command /announcement [<text>]:
+    description: Announce all players
+    aliases: /확성기 [<text>]
+    trigger:
+        if arg 1 is set:
+            if #특정변수 is not set:
+                #FIXME: 좀 몬생김 확성기폼이
+                broadcast " ││ %player% ││ ▶▶ %arg 1% ◀◀"
+                # 쿨타임 변수 지정
+                # 시간 경과에 따라 쿨타임 변수 값 1씩 증가
+                # 특정 값 도달 시 변수 삭제, 조건에 변수가 not set일 때 확성기 가능하도록
+            else:
+                message "확성기 쿨타임입니다!" to player
+        else:
+            message "사용법: /확성기 <할 말>" to player
