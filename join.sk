@@ -20,5 +20,3 @@ on join:
         broadcast "&c■ 허가되지 않은 플레이어(%player%)&c의 접속으로 킥 처리합니다."
         kick player due to "&cYUMC 공식 홈페이지에서 회원가입(영대생 인증)이 필요한 플레이어입니다. 문제가 있는 경우 관리자에게 문의하세요."
         stop
-    
-    

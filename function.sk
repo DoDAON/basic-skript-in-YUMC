@@ -4,4 +4,3 @@ function HangulToUUID(t:text) :: text:
             set {_value} to loop-index
             exit loop
     return {_value}
-            
