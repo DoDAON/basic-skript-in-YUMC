@@ -1,6 +1,8 @@
 on region enter:
     wait 3 ticks
     #region은 무조건 소문자만 / warp는 대소문자 구분
+    #/rg claim 이름 : 지역 선언
+    #/rg list : 리전 리스트
     #overGroundEntrance -> JungdoLounge
     #중도 위쪽 밖 -> 중도 스타벅스
     if "%region at player%" contains "overgroundentrance":
