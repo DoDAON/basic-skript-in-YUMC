@@ -12,8 +12,9 @@ command /announcement [<text>]:
         if arg 1 is set:
             #60초 쿨타임 생성
             if {cooldown::%player%} is not set:
+                set {_name} to uuid of player
                 #FIXME: 좀 몬생김 확성기폼이
-                broadcast " ││ %{nick::%player%}% ││ ▶▶ %arg 1% ◀◀"
+                broadcast " ││ %{nick::%{_name}%}% ││ ▶▶ %arg 1% ◀◀"
                 # 쿨타임 변수 지정
                 # 시간 경과에 따라 쿨타임 변수 값 1씩 증가
                 # 특정 값 도달 시 변수 삭제, 조건에 변수가 not set일 때 확성기 가능하도록
