@@ -1,0 +1,419 @@
+on inventory click:
+	if event-inventory is player's inventory:
+		if index of event-slot is 39:
+			if event-player's cursor slot is not air:
+				set {_item} to event-player's cursor slot
+				if {_item} is pink dye:
+					cancel event
+					if helmet of player is not set:
+						set event-player's cursor slot to air
+					else:
+						set event-player's cursor slot to helmet of player
+					set helmet of player to {_item}
+				if {_item} is banner:
+					cancel event
+					if helmet of player is not set:
+						set event-player's cursor slot to air
+					else:
+						set event-player's cursor slot to helmet of player
+					set helmet of player to {_item}
+				if name of {_item} contains "날개":
+					cancel event
+					if helmet of player is not set:
+						set event-player's cursor slot to air
+					else:
+						set event-player's cursor slot to helmet of player
+					set helmet of player to {_item}
+				if name of {_item} contains "태":
+					if name of {_item} contains "극":
+						if name of {_item} contains "기":
+							cancel event
+							if helmet of player is not set:
+								set event-player's cursor slot to air
+							else:
+								set event-player's cursor slot to helmet of player
+							set helmet of player to {_item}
+
+
+command /ilgwal:
+	permission: op
+	trigger:
+		loop all blocks in radius 300 around player:
+			if loop-block is sign:
+				if line 4 of loop-block contains "Shift +":
+					set {_pri} to line 2 of loop-block
+		
+					set {_ppp::*} to split {_pri} at " "
+					set {_pri} to {_ppp::1}
+		
+					replace all "," with "" in {_pri}
+					replace all "&b" with "" in {_pri}
+					replace all "&l" with "" in {_pri}
+					replace all " " with "" in {_pri}
+		
+					set {_price} to "%{_pri}%" parsed as integer
+
+					set {_dopi} to {_price} / 100
+					set {_pp} to numformat("%{_dopi}%")
+					set line 2 of loop-block to "&b%{_pp}% &f鏝"
+					set line 4 of loop-block to "&a[구입] &rShift+우클릭"
+
+command /idong <text>:
+	permission: op
+	trigger:
+		if arg-1 is "south":
+			set {_block} to block at player's location
+			set {_lb} to location of block 1 east {_block}
+
+			set {_x} to x-coordinate of {_lb}
+			set {_y} to y-coordinate of {_lb}
+			set {_z} to z-coordinate of {_lb}
+			set {_world} to world of player
+			set {_yaw} to 0
+			set {_pitch} to 4.4
+			teleport player to location({_x}, {_y}, {_z}, {_world}, {_yaw}, {_pitch})
+			execute player command "/npc copy"
+		else if arg-1 is "north":
+			set {_block} to block at player's location
+			set {_lb} to location of block 1 east {_block}
+
+			set {_x} to x-coordinate of {_lb}
+			set {_y} to y-coordinate of {_lb}
+			set {_z} to z-coordinate of {_lb}
+			set {_world} to world of player
+			set {_yaw} to -180
+			set {_pitch} to 4.4
+			teleport player to location({_x}, {_y}, {_z}, {_world}, {_yaw}, {_pitch})
+			execute player command "/npc copy"
+
+
+
+
+on right click on sign:
+#	if player is op:
+#		set line 1 of event-block to "&0&l병풍"
+#		set line 2 of event-block to "&b300 &f鏝"
+#		set line 4 of event-block to "&a[구입] &rShift+우클릭"
+#		stop
+	if "%region at location of event-block%" contains "gagustore":
+		if line 4 of event-block contains "[구입]":
+			if player is sneaking:
+				set {_b} to the block behind event-location
+				set {_bb} to the block above {_b}
+				
+				if "%{_bb}%" contains "glazed":
+					set {_sangpum} to {_bb}
+				else:
+					loop all entities in radius 0.8 around {_bb}:
+						if loop-entity is item frame:
+							set {_i} to item of loop-entity
+							set {_sangpum} to {_i}
+							set {_bun} to model data of {_i}
+				
+				set {_pri} to line 2 of event-block
+		
+				set {_ppp::*} to split {_pri} at " "
+				set {_pri} to {_ppp::1}
+	
+				replace all "," with "" in {_pri}
+				replace all "&b" with "" in {_pri}
+				replace all "&l" with "" in {_pri}
+				replace all " " with "" in {_pri}
+	
+				set {_price} to "%{_pri}%" parsed as integer
+
+				if {_price} > {pega::%uuid of player%}:
+					message "&c■ 가구를 구입하기 위한 페가가 부족합니다!" to player
+					stop
+				else:
+					if player's inventory has enough space for {_sangpum}:
+						give 1 of {_sangpum} to player
+						removepega(player, {_price}, "store")
+						message "&b■ 가구를 성공적으로 구입했습니다!" to player
+					else:
+						message "&c■ 인벤토리 공간이 부족합니다." to player
+
+	else if "%region at location of event-block%" contains "hatshop":
+#		if player is op:
+#			message "ddd" to player
+#			set {_b} to the block behind event-location
+#			set {_bb} to the block above {_b}
+			
+#			loop all entities in radius 0.8 around {_bb}:
+#				set {_i} to helmet of loop-entity
+#				set {_m} to model data of {_i}
+#			set {_ss::*} to split "%{_i}%" at "named " 
+
+#			set {_g} to {_ss::2}
+#			replace all "&b" with "&0" in {_g}
+#			set line 1 of event-block to "%{_g}%"
+#			set {_pp} to numformat("%{price::%uuid of player%}%")
+#			set line 2 of event-block to "&b200 &f鏝"
+#			set line 3 of event-block to "&d[착용] &r우클릭"
+#			set line 4 of event-block to "&a[구입] &rShift+우클릭"
+		if line 3 of event-block contains "[착용]":
+
+			if player is sneaking:
+				set {_b} to the block behind event-location
+				set {_bb} to the block above {_b}
+				
+				loop all entities in radius 0.8 around {_bb}:
+					set {_i} to helmet of loop-entity
+					set {_m} to model data of {_i}
+
+				set {_pri} to line 2 of event-block
+		
+				set {_ppp::*} to split {_pri} at " "
+				set {_pri} to {_ppp::1}
+	
+				replace all "," with "" in {_pri}
+				replace all "&b" with "" in {_pri}
+				replace all "&l" with "" in {_pri}
+				replace all " " with "" in {_pri}
+	
+				set {_price} to "%{_pri}%" parsed as integer
+
+				if {_price} > {pega::%uuid of player%}:
+					message "&c■ 모자를 구입하기 위한 페가가 부족합니다!" to player
+					stop
+				else:
+					if player's inventory has enough space for {_i}:
+						give 1 of {_i} to player
+						removepega(player, {_price}, "hat")
+						message "&b■ 모자를 성공적으로 구입했습니다!" to player
+					else:
+						message "&c■ 인벤토리 공간이 부족합니다." to player
+					
+
+			else:
+				set {_b} to the block behind event-location
+				set {_bb} to the block above {_b}
+				
+				loop all entities in radius 0.8 around {_bb}:
+					if loop-entity is npc:
+						execute console command "/npc sel %citizen id of loop-entity%"
+						wait 1 ticks
+						execute console command "/npc skin %player%"
+					set {_i} to helmet of loop-entity
+					set {_m} to model data of {_i}
+
+		
+
+
+
+
+
+command /price <integer>:
+	permission: op
+	trigger:
+		set {price::%uuid of player%} to arg-1
+		message "입력 가격은 %{price::%uuid of player%}%" to player
+
+command /hat <integer>:
+	permission: op
+	trigger:
+		give 1 of {hatname::%arg-1%} to player
+on script load:
+#	set {_i} to 0
+#	loop 200 times:
+#		add 1 to {_i}
+#		delete {hatname::%{_i}%}
+
+	set {hatname::1} to pink dye named "&b&l터키식 모자" with model data 1 with lore "&r&3Turkish Fez"
+	set {hatname::2} to pink dye named "&b&l오징어 모자" with model data 2 with lore "&r&3Squid Hat"
+	set {hatname::3} to pink dye named "&b&l화살 모자" with model data 3 with lore "&r&3Arrow Hat" 
+	set {hatname::4} to pink dye named "&b&l프라이팬 모자" with model data 4 with lore "&r&3Frying Pan Hat"
+
+	set {hatname::5} to pink dye named "&b&l흰색 톱햇" with model data 5 with lore "&r&3White Tophat"
+	set {hatname::6} to pink dye named "&b&l주황색 톱햇" with model data 6 with lore "&r&3Orange Tophat"
+	set {hatname::7} to pink dye named "&b&l심홍색 톱햇" with model data 7 with lore "&r&3Magenta Tophat"
+	set {hatname::8} to pink dye named "&b&l하늘색 톱햇" with model data 8 with lore "&r&3Light Blue Tophat"
+	set {hatname::9} to pink dye named "&b&l노란색 톱햇" with model data 9 with lore "&r&3Yellow Tophat"
+	set {hatname::10} to pink dye named "&b&l라임색 톱햇" with model data 10 with lore "&r&3Lime Tophat"
+	set {hatname::11} to pink dye named "&b&l분홍색 톱햇" with model data 11 with lore "&r&3Pink Tophat"
+	set {hatname::12} to pink dye named "&b&l회색 톱햇" with model data 12 with lore "&r&3Gary Tophat"
+	set {hatname::13} to pink dye named "&b&l연회색 톱햇" with model data 13 with lore "&r&3Light Gary Tophat"
+	set {hatname::14} to pink dye named "&b&l청록색 톱햇" with model data 14 with lore "&r&3Cyan Tophat"
+	set {hatname::15} to pink dye named "&b&l보라색 톱햇" with model data 15 with lore "&r&3Purple Tophat"
+	set {hatname::16} to pink dye named "&b&l파란색 톱햇" with model data 16 with lore "&r&3Blue Tophat"
+	set {hatname::17} to pink dye named "&b&l갈색 톱햇" with model data 17 with lore "&r&3Brown Tophat"
+	set {hatname::18} to pink dye named "&b&l초록색 톱햇" with model data 18 with lore "&r&3Green Tophat"
+	set {hatname::19} to pink dye named "&b&l빨간색 톱햇" with model data 19 with lore "&r&3Red Tophat"
+	set {hatname::20} to pink dye named "&b&l검은색 톱햇" with model data 20 with lore "&r&3Black Tophat"
+	set {hatname::21} to pink dye named "&b&l무지개 톱햇" with model data 21 with lore "&r&3Rainbow Tophat"
+	set {hatname::22} to pink dye named "&b&l모노클이 달린 톱햇" with model data 22 with lore "&r&3Tophat with Monocle"
+	set {hatname::23} to pink dye named "&b&l조선의 갓" with model data 23 with lore "&r&3Gat of Joseon"
+	set {hatname::24} to pink dye named "&b&l고양이 모자 1" with model data 24 with lore "&r&3Cat Hat 1"
+	set {hatname::25} to pink dye named "&b&l고양이 모자 2" with model data 25 with lore "&r&3Cat Hat 2"
+	set {hatname::26} to pink dye named "&b&l고양이 모자 3" with model data 26 with lore "&r&3Cat Hat 3"
+	set {hatname::27} to pink dye named "&b&l고양이 모자 4" with model data 27 with lore "&r&3Cat Hat 4"
+	set {hatname::28} to pink dye named "&b&l고양이 모자 5" with model data 28 with lore "&r&3Cat Hat 5"
+	set {hatname::29} to pink dye named "&b&l고양이 모자 6" with model data 29 with lore "&r&3Cat Hat 6"
+	set {hatname::30} to pink dye named "&b&l고양이 모자 7" with model data 30 with lore "&r&3Cat Hat 7"
+	set {hatname::31} to pink dye named "&b&l고양이 모자 8" with model data 31 with lore "&r&3Cat Hat 8"
+	set {hatname::32} to pink dye named "&b&l고양이 모자 9" with model data 32 with lore "&r&3Cat Hat 9"
+	set {hatname::33} to pink dye named "&b&l고양이 모자 10" with model data 33 with lore "&r&3Cat Hat 10"
+	set {hatname::34} to pink dye named "&b&l고양이 모자 11" with model data 34 with lore "&r&3Cat Hat 11"
+	set {hatname::35} to pink dye named "&b&l고양이 모자 12" with model data 35 with lore "&r&3Cat Hat 12"
+	set {hatname::36} to pink dye named "&b&l선글라스" with model data 36 with lore "&r&3Sunglasses"
+	set {hatname::37} to pink dye named "&b&l해리포터 안경" with model data 37 with lore "&r&3Glasses of Harry Potter"
+	set {hatname::38} to pink dye named "&b&l반테 안경" with model data 38 with lore "&r&3Half Rim Glasses"
+	set {hatname::39} to pink dye named "&b&l무지개 선글라스" with model data 39 with lore "&r&3Rainbow Glasses"
+	set {hatname::40} to pink dye named "&b&l사서의 안경" with model data 40 with lore "&r&3Librarian's Glasses"
+	set {hatname::41} to pink dye named "&b&l3D 안경" with model data 41 with lore "&r&33D Glasses"
+	set {hatname::42} to pink dye named "&b&l뱅뱅이 안경" with model data 42 with lore "&r&3Crazy Glasses"
+	set {hatname::43} to pink dye named "&b&l빨간색 안경" with model data 43 with lore "&r&3Red Glasses"
+	set {hatname::44} to pink dye named "&b&l파란색 안경" with model data 44 with lore "&r&3Blue Glasses"
+	set {hatname::45} to pink dye named "&b&l흰색 안경" with model data 45 with lore "&r&3White Glasses"
+	set {hatname::46} to pink dye named "&b&l닌자 두건" with model data 46 with lore "&r&3Headband of Ninja"
+	set {hatname::47} to pink dye named "&b&l하회탈" with model data 47 with lore "&r&3Hahoe Mask"
+	set {hatname::48} to pink dye named "&b&l알렉스 탈" with model data 48 with lore "&r&3Alex Mask"
+	set {hatname::49} to pink dye named "&b&l파란색 스노클" with model data 49 with lore "&r&3Blue Snorkel"
+	set {hatname::50} to pink dye named "&b&l빨간색 스노클" with model data 50 with lore "&r&3Red Snorkel"
+	set {hatname::51} to pink dye named "&b&l돌아가는 눈" with model data 51 with lore "&r&3Googly Eyes"
+	set {hatname::52} to pink dye named "&b&l주민의 용접 마스크" with model data 52 with lore "&r&3Armorer Villager's Mask"
+	set {hatname::53} to pink dye named "&b&l주민의 농부 모자" with model data 53 with lore "&r&3Farmer Villager's Hat"
+	set {hatname::54} to pink dye named "&b&l주민의 코" with model data 54 with lore "&r&3Villager's Nose"
+	set {hatname::55} to pink dye named "&b&l마리오 모자" with model data 55 with lore "&r&3Mario Cap"
+	set {hatname::56} to pink dye named "&b&l루이지 모자" with model data 56 with lore "&r&3Luigi Cap"
+	set {hatname::57} to pink dye named "&b&l캐피 모자" with model data 57 with lore "&r&3Cappy Cap"
+	set {hatname::58} to pink dye named "&b&l빨간 키노피오 모자" with model data 58 with lore "&r&3Read Toad Hat"
+	set {hatname::59} to pink dye named "&b&l파란 키노피오 모자" with model data 59 with lore "&r&3Blue Toad Hat"
+	set {hatname::60} to pink dye named "&b&l노란 키노피오 모자" with model data 60 with lore "&r&3Yellow Toad Hat"
+	set {hatname::61} to pink dye named "&b&l초록 키노피오 모자" with model data 61 with lore "&r&3Green Toad Hat"
+	set {hatname::62} to pink dye named "&b&l마리오 탈" with model data 62 with lore "&r&3Mario Mask"
+	set {hatname::63} to pink dye named "&b&l루이지 탈" with model data 63 with lore "&r&3Luigi Mask"
+	set {hatname::64} to pink dye named "&b&l가스트 모자" with model data 64 with lore "&r&3Ghast Hat"
+	set {hatname::65} to pink dye named "&b&l인디언 두건" with model data 65 with lore "&r&3Nativie American Headband"
+	set {hatname::66} to pink dye named "&b&l제이슨 탈" with model data 66 with lore "&r&3Jason Mask"
+	set {hatname::67} to pink dye named "&b&l갈색 안경" with model data 67 with lore "&r&3Brown Glasses"
+	set {hatname::68} to pink dye named "&b&l미키마우스 귀" with model data 68 with lore "&r&3Micky Mouse Ear"
+	set {hatname::69} to pink dye named "&b&l미니마우스 귀" with model data 69 with lore "&r&3Minnie Mouse Ear"
+	set {hatname::70} to pink dye named "&b&l로드콘 모자" with model data 70 with lore "&r&3Road Cone Hat"
+	set {hatname::71} to pink dye named "&b&l토끼 귀" with model data 71 with lore "&r&3Bunny Ear"
+	set {hatname::72} to pink dye named "&b&l개구리 페페 탈" with model data 72 with lore "&r&3Pepe the Frog Mask"
+	set {hatname::73} to pink dye named "&b&l이브이 모자" with model data 73 with lore "&r&3Eevee Hat"
+	set {hatname::74} to pink dye named "&b&l잉어킹 모자" with model data 74 with lore "&r&3Magikarp Hat"
+	set {hatname::75} to pink dye named "&b&l피카츄 모자" with model data 75 with lore "&r&3Picachu Hat"
+	set {hatname::76} to pink dye named "&b&l잠만보 인형탈" with model data 76 with lore "&r&3Snorlax Costume"
+	set {hatname::77} to pink dye named "&b&l여우 모자" with model data 77 with lore "&r&3Fox Hat"
+	set {hatname::78} to pink dye named "&b&l화관" with model data 78 with lore "&r&3Flower Crown"
+	set {hatname::79} to pink dye named "&b&l늑대 모자" with model data 79 with lore "&r&3Wolf Hat"
+	set {hatname::80} to pink dye named "&b&l스톰트루퍼 헬멧" with model data 80 with lore "&r&3Stormtrooper Helmet"
+	set {hatname::81} to pink dye named "&b&l마녀 모자" with model data 81 with lore "&r&3Witch's Hat"
+	set {hatname::82} to pink dye named "&b&l파란색 마녀 모자" with model data 82 with lore "&r&3Witch's Blue Hat"
+	set {hatname::83} to pink dye named "&b&l사과색 마녀 모자" with model data 83 with lore "&r&3With's Candy Red Hat"
+	set {hatname::84} to pink dye named "&b&l청록색 마녀 모자" with model data 84 with lore "&r&3Witch's Cyan Hat"
+	set {hatname::85} to pink dye named "&b&l검푸른 마녀 모자" with model data 85 with lore "&r&3Witch's Dark Blue Hat"
+	set {hatname::86} to pink dye named "&b&l회색 마녀 모자" with model data 86 with lore "&r&3Witch's Gray Hat"
+	set {hatname::87} to pink dye named "&b&l초록색 마녀 모자" with model data 87 with lore "&r&3Witch's Green Hat"
+	set {hatname::88} to pink dye named "&b&l라임색 마녀 모자" with model data 88 with lore "&r&3Witch's Lime Hat"
+	set {hatname::89} to pink dye named "&b&l민트색 마녀 모자" with model data 89 with lore "&r&3Witch's Mint Hat"
+	set {hatname::90} to pink dye named "&b&l주황색 마녀 모자" with model data 90 with lore "&r&3Witch's Orange Hat"
+	set {hatname::91} to pink dye named "&b&l분홍색 마녀 모자" with model data 91 with lore "&r&3Witch's Pink Hat"
+	set {hatname::92} to pink dye named "&b&l보라색 마녀 모자" with model data 92 with lore "&r&3Witch's Purple Hat"
+	set {hatname::93} to pink dye named "&b&l빨간색 마녀 모자" with model data 93 with lore "&r&3Witch's Red Hat"
+	set {hatname::94} to pink dye named "&b&l옥색 마녀 모자" with model data 94 with lore "&r&3Witch's Teal Hat"
+	set {hatname::95} to pink dye named "&b&l바이올렛 마녀 모자" with model data 95 with lore "&r&3Witch's Violet Hat"
+	set {hatname::96} to pink dye named "&b&l노란색 마녀 모자" with model data 96 with lore "&r&3Witch's Yellow Hat"
+	set {hatname::97} to pink dye named "&b&l사모(신하 모자)" with model data 97 with lore "&r&3Samo of Joseon"
+	set {hatname::98} to pink dye named "&b&l삿갓" with model data 98 with lore "&r&3Satgat of Joseon"
+	set {hatname::99} to pink dye named "&b&l족두리" with model data 99 with lore "&r&3Jokduri of Joseon"
+	set {hatname::100} to pink dye named "&b&l꽃삿갓" with model data 100 with lore "&r&3Flower Satgat of Joseon"
+	set {hatname::101} to pink dye named "&b&l사또의 전립" with model data 101 with lore "&r&3Satto's Jeonrip"
+	set {hatname::102} to pink dye named "&b&l고양이 귀" with model data 102 with lore "&r&3Cat Ear"
+	set {hatname::103} to pink dye named "&b&l생닭 모자" with model data 103 with lore "&r&3Living Chicken Hat"
+	set {hatname::104} to pink dye named "&b&l드라큘라 복장" with model data 104 with lore "&r&3Draculacloak Costume"
+	set {hatname::105} to pink dye named "&b&l코로나 마스크" with model data 105 with lore "&r&3Mask for Corona Virus"
+	set {hatname::106} to pink dye named "&b&l종이가방 마스크" with model data 106 with lore "&r&3Paper Bag Mask"
+	set {hatname::107} to pink dye named "&b&l해적의 모자" with model data 107 with lore "&r&3Pirate's Hat"
+	set {hatname::108} to pink dye named "&b&l딸기 모자" with model data 108 with lore "&r&3Strawberry Hat"
+	set {hatname::109} to pink dye named "&b&l여왕의 왕관" with model data 109 with lore "&r&3Queen's Tiara"
+	set {hatname::110} to pink dye named "&b&l왕비의 가채" with model data 110 with lore "&r&3Queen's Gachae"
+	set {hatname::111} to pink dye named "&b&l성균관 유생의 유건" with model data 111 with lore "&r&3Yugeon for Student of SSK"
+	set {hatname::112} to pink dye named "&b&l곰방대" with model data 112 with lore "&r&3Korean Smoking Pipe"
+	set {hatname::113} to pink dye named "&b&l양반의 정자관" with model data 113 with lore "&r&3Jeongjagwan for Yangban"
+	set {hatname::114} to pink dye named "&b&l졸업 학사모" with model data 114 with lore "&r&3Graduation Cap"
+	set {hatname::115} to pink dye named "&b&l뭉순임당의 탑사모" with model data 115 with lore "&r&3Myungsun's Tower Cap"
+	set {hatname::116} to pink dye named "&b&l해골 1" with model data 116 with lore "&r&3Skull 1"
+	set {hatname::117} to pink dye named "&b&l해골 2" with model data 117 with lore "&r&3Skull 2"
+	set {hatname::118} to pink dye named "&b&l해골 3" with model data 118 with lore "&r&3Skull 3"
+	set {hatname::119} to pink dye named "&b&l토토로 인형탈" with model data 119 with lore "&r&3Totoro Costume"
+	set {hatname::120} to pink dye named "&b&l오니의 뿔" with model data 120 with lore "&r&3Oni's Horns"
+	set {hatname::121} to pink dye named "&b&l흰 토토로 인형 모자" with model data 121 with lore "&r&3White Totoro Doll Hat"
+	set {hatname::122} to pink dye named "&b&l지브리 병사의 파란 모자" with model data 122 with lore "&r&3Ghibli Solider's Blue Cap"
+	set {hatname::123} to pink dye named "&b&l라퓨타 파즈의 모자" with model data 123 with lore "&r&3Cap for Paz in Laputa"
+	set {hatname::124} to pink dye named "&b&l가오나시 탈" with model data 124 with lore "&r&3Kaonashi Mask"
+	set {hatname::125} to pink dye named "&b&l나뭇잎 모자" with model data 125 with lore "&r&3Leaf Hat"
+	set {hatname::126} to pink dye named "&b&l아시타카의 후드" with model data 126 with lore "&r&3Ashitaka's Hood"
+	set {hatname::127} to pink dye named "&b&l소년 칸타의 모자" with model data 127 with lore "&r&3Kanta's Cap"
+	set {hatname::128} to pink dye named "&b&l카마지 영감의 얼굴" with model data 128 with lore "&r&3Kamaji's Face"
+	set {hatname::129} to pink dye named "&b&l까마귀와 쥐 인형 모자" with model data 129 with lore "&r&3Rat and Bird Doll Hat"
+	set {hatname::130} to pink dye named "&b&l지브리 쌀 모자" with model data 132 with lore "&r&3Ghibli Rice Hat"
+	set {hatname::131} to pink dye named "&b&l걷는 토토로 인형 모자" with model data 133 with lore "&r&3Walking Totoro Doll Hat"
+	set {hatname::132} to pink dye named "&b&l파란 토토로 인형 모자" with model data 134 with lore "&r&3Blue Totoro Doll Hat"
+	set {hatname::133} to pink dye named "&b&l지브리 쌀 모자" with model data 135 with lore "&r&3Ghibli Rice Hat"
+	set {hatname::134} to pink dye named "&b&l지브리 병사의 초록 모자" with model data 136 with lore "&r&3Ghibli Solider's Green Cap"
+	set {hatname::135} to pink dye named "&b&l원령공주의 탈" with model data 137 with lore "&r&3Mononoke Hime's Mask"
+	set {hatname::136} to pink dye named "&b&l소피의 모자" with model data 138 with lore "&r&3Sophie's Hat"
+	set {hatname::137} to pink dye named "&b&l가오나시 인형탈" with model data 139 with lore "&r&3Kaonashi Costume"
+	set {hatname::138} to pink dye named "&b&l파티 모자" with model data 140 with lore "&r&3Hat for Party"
+	set {hatname::139} to pink dye named "&b&l카우보이 모자" with model data 141 with lore "&r&3Cowboy Hat"
+	set {hatname::140} to pink dye named "&b&l유니콘의 뿔" with model data 142 with lore "&r&3Unicorn's Horn"
+	set {hatname::141} to pink dye named "&b&l프로펠러 모자" with model data 143 with lore "&r&3Propeller Cap"
+	set {hatname::142} to pink dye named "&b&l천사의 링" with model data 144 with lore "&r&3Angel Ring"
+	set {hatname::143} to pink dye named "&b&l살아있는 늑대 모자" with model data 145 with lore "&r&3Living Wolf Hat"
+	set {hatname::144} to pink dye named "&b&l행성 모자" with model data 146 with lore "&r&3Planet Hat"
+	set {hatname::145} to pink dye named "&b&l양 모자" with model data 148 with lore "&r&3Sheep Hat"
+	set {hatname::146} to pink dye named "&b&l밀짚 모자" with model data 149 with lore "&r&3Boater"
+	set {hatname::147} to pink dye named "&b&l검은색 야구모자" with model data 150 with lore "&r&3Black Baseball Cap"
+	set {hatname::148} to pink dye named "&b&l요리사 모자" with model data 151 with lore "&r&3Hat for Chef"
+	set {hatname::149} to pink dye named "&b&l파란색 야구모자" with model data 152 with lore "&r&3Blue Baseball Cap"
+	set {hatname::150} to pink dye named "&b&l분홍색 야구모자" with model data 153 with lore "&r&3Pink Baseball Cap"
+
+	set {hatname::151} to pink dye named "&b&l악마의 뿔 1" with model data 155 with lore "&r&3Devil's Horn 1"
+	set {hatname::152} to pink dye named "&b&l악마의 뿔 2" with model data 156 with lore "&r&3Devil's Horn 2"
+	set {hatname::153} to pink dye named "&b&l어항 모자" with model data 157 with lore "&r&3Fish Bowl Hat"
+	set {hatname::154} to pink dye named "&b&l남자 금발 가발" with model data 158 with lore "&r&3Blond Wig for Man"
+	set {hatname::155} to pink dye named "&b&l중세 기사의 투구" with model data 159 with lore "&r&3Medieval Knight's Helmet"
+	set {hatname::156} to pink dye named "&b&l일국의 왕관" with model data 160 with lore "&r&3Crown for Any King"
+	set {hatname::157} to pink dye named "&b&l여자 금발 가발" with model data 161 with lore "&r&3Blond Wig for Woman"
+	set {hatname::158} to pink dye named "&b&l눈사람의 모자" with model data 162 with lore "&r&3Hat for Snowman"
+	set {hatname::159} to pink dye named "&b&l낮은 모자" with model data 163 with lore "&r&3Tweed Cap"
+	set {hatname::160} to pink dye named "&b&l복을 부르는 고양이 모자" with model data 164 with lore "&r&3Manekineko Hat"
+	set {hatname::161} to pink dye named "&b&l푸른색 겨울 모자" with model data 165 with lore "&r&3Cyan Ushanka"
+	set {hatname::162} to pink dye named "&b&l빨간색 겨울 모자" with model data 166 with lore "&r&3Red Ushanka"
+	set {hatname::163} to pink dye named "&b&l분홍색 겨울 모자" with model data 167 with lore "&r&3Pink Ushanka"
+	set {hatname::164} to pink dye named "&b&l검은색 겨울 모자" with model data 168 with lore "&r&3Black Ushanka"
+	set {hatname::165} to pink dye named "&b&l빨간 테두리 겨울 모자" with model data 169 with lore "&r&3Red Border Ushanka"
+	set {hatname::166} to pink dye named "&b&l산타 모자" with model data 170 with lore "&r&3Santa's Hat"
+	set {hatname::167} to pink dye named "&b&l주황색 겨울 모자" with model data 171 with lore "&r&3Orange Ushanka"
+	set {hatname::168} to pink dye named "&b&l초록색 겨울 모자" with model data 172 with lore "&r&3Green Ushanka"
+	set {hatname::169} to pink dye named "&b&l노란색 겨울 모자" with model data 173 with lore "&r&3Yellow Ushanka"
+
+	set {hatname::170} to pink dye named "&b&l우주인의 헬멧" with model data 174 with lore "&r&3Astronaut's Helmet"
+	set {hatname::171} to pink dye named "&b&l배트맨 탈" with model data 175 with lore "&r&3Batman Mask"
+	set {hatname::172} to pink dye named "&b&l광대 분장" with model data 176 with lore "&r&3Clown Mask"
+	set {hatname::173} to pink dye named "&b&l코끼리 모자" with model data 177 with lore "&r&3Elephant Hat"
+	set {hatname::174} to pink dye named "&b&l말 모자" with model data 178 with lore "&r&3Horse Hat"
+	set {hatname::175} to pink dye named "&b&l아이언맨 헬멧" with model data 179 with lore "&r&3Ironman Helmet"
+	set {hatname::176} to pink dye named "&b&l코알라 모자" with model data 180 with lore "&r&3Koala Hat"
+	set {hatname::177} to pink dye named "&b&l팬더 모자" with model data 181 with lore "&r&3Panda Hat"
+	set {hatname::178} to pink dye named "&b&l펭귄 모자" with model data 182 with lore "&r&3Penguin Hat"
+	set {hatname::179} to pink dye named "&b&l슈렉 모자" with model data 183 with lore "&r&3Shrek Hat"
+	set {hatname::180} to pink dye named "&b&l티라노 탈" with model data 184 with lore "&r&3Trex Mask"
+	set {hatname::181} to pink dye named "&b&l안전모" with model data 185 with lore "&r&3Safety Helmet"
+	set {hatname::182} to pink dye named "&b&l노란색 안전모" with model data 186 with lore "&r&3Safety Helmet(Yellow)"
+
+	set {hatname::183} to pink dye named "&b&l성균관 유생의 핑크 유건" with model data 9044 with lore "&r&3Yugeon for Student of SKK (Pink)"
+	set {hatname::184} to pink dye named "&b&l홍길동의 패랭이" with model data 9045 with lore "&r&3Paeraengi"
+	set {hatname::185} to pink dye named "&b&l조선의 핵인싸 갓" with model data 9046 with lore "&r&3Gat for Hack-Inssa of Joseon"
+	set {hatname::186} to pink dye named "&b&l무당의 꽃갓" with model data 9047 with lore "&r&3Flower Gat for Mudang"
+
+	set {hatname::187} to pink dye named "&b&l달팽이 모자" with model data 9051 with lore "&r&3Snail Hat"
+	set {hatname::188} to pink dye named "&b&l체리 모자" with model data 9052 with lore "&r&3Cherry Hat"
+	set {hatname::189} to pink dye named "&b&l토끼 모자" with model data 9053 with lore "&r&3Rabbit Hat"
+	set {hatname::190} to pink dye named "&b&l오리 모자" with model data 9054 with lore "&r&3Duck Hat"
+
+	set {hatname::191} to pink dye named "&b&l새마을 모자" with model data 9055 with lore "&r&3Saemaul Hat"
+	set {hatname::192} to pink dye named "&b&l상모" with model data 9048 with lore "&r&3Sangmo"

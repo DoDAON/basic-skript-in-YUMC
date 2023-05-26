@@ -1,0 +1,115 @@
+on command:
+	if command is "sit":
+		if {level::%uuid of player%} is 0:
+			cancel event
+	if command is "crawl":
+		if {level::%uuid of player%} is 0:
+			cancel event
+	if command is "lay":
+		if {level::%uuid of player%} is 0:
+			cancel event
+
+on break of item frame:
+	if "%item of event-entity%" contains "air":
+		stop
+	else:
+		cancel event
+
+on break of painting:
+	if player is not set:
+		cancel event
+	else:
+		if distance between player and event-entity > 3:
+			cancel event
+
+on damage:
+	if victim is item frame:
+		if "%damage cause%" is not "attack":
+			cancel event
+
+	if victim is armor stand:
+		if "%damage cause%" is not "attack":
+			cancel event
+
+
+
+on shoot:
+	if shooter's chestplate is elytra:
+		if shooter is not op:
+			message "&c■ 겉날개를 입은 채로 폭죽이나 화살을 사용할 수 없습니다." to shooter
+			cancel event
+	if shooter' world is "flat":
+		cancel event
+
+on consume of chorus fruit:
+	cancel event
+
+
+on spawn of chicken:
+	if event-entity's world is "campus":
+		cancel event
+
+on spawn of wither:
+	cancel event
+
+on spawn of wandering trader:
+	cancel event
+
+on spawn of phantom:
+	cancel event
+
+on explode:
+	cancel event
+
+every 1 ticks:
+	loop all players:
+		if "%loop-player's world%" contains "end":
+			if loop-player is not op:
+				teleport loop-player to spawn of "world"
+				message "&c■ 아직 엔더 월드에 입장하실 수 없습니다." to loop-player
+
+on command "/plugins":
+	if player is not op:
+		if player is not console:
+			cancel event
+
+on command "/bukkit:plugins":
+	cancel event
+
+on command "/?":
+	cancel event
+
+on command "/bukkit:?":
+	cancel event
+
+on command "/bukkit:pl":
+	cancel event
+
+on command "/bukkit:plugin":
+	cancel event
+
+on command "/plugin":
+	cancel event
+
+on command "/bukkit:pl":
+	cancel event
+
+on command "/pl":
+	cancel event
+
+on inventory click:
+	if "%name of player's current inventory% " contains "Repair":
+		if "%name of player's current inventory% " contains "Name":
+			set {_i0} to slot 0 of player's current inventory
+			set {_i2} to slot 2 of player's current inventory
+			if clicked slot is 2:
+				if {_i2} is clicked item: 
+					if "%{_i0}%" is not "%{_i2}%":
+						if clicked item is not nametag:
+							message "&c■ 아이템 이름 변경은 이름표만 가능합니다." to player
+							cancel event
+
+on rightclick with any dye:
+	if event-block is any sign:
+		if custom model data of player's tool is not 0:
+			cancel event

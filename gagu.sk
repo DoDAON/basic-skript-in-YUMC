@@ -1,0 +1,536 @@
+on rightclick on entity:
+	if event-entity is item frame:
+		set {_x::*} to split "%nbt of event-entity%" at "CustomModelData:"
+		set {_y::*} to split {_x::2} at "}"
+
+		if player's tool is lime dye:
+			if model data of player's tool is not 0:
+				set int tag "Invisible" of nbt of event-entity to 1
+				
+			if player is sneaking:
+				set int tag "Invisible" of nbt of event-entity to 1
+		else:
+			if player is sneaking:
+				if " %region at player's location% " contains " usershop ":
+					set {_d} to 1
+				else:
+					set int tag "Invisible" of nbt of event-entity to 1
+
+on click on any button:
+	if location of event-block is {whiteguip}:
+		set {_price} to 100
+
+		if {_price} > {pega::%uuid of player%}:
+			message "&c■ 쿠폰을 구입하기 위한 페가가 부족합니다!" to player
+			stop
+		else:
+			set {_i} to paper named "&f&l화이트 쿠폰" with model data 33
+			if player's inventory has enough space for {_i}:
+				give 1 of {_i} to player
+				removepega(player, {_price}, "store")
+				message "&b■ 쿠폰을 성공적으로 구입했습니다!" to player
+			else:
+				message "&c■ 인벤토리 공간이 부족합니다." to player
+	else if location of event-block is {yellowguip}:
+		set {_price} to 150
+
+		if {_price} > {pega::%uuid of player%}:
+			message "&c■ 쿠폰을 구입하기 위한 페가가 부족합니다!" to player
+			stop
+		else:
+			set {_i} to paper named "&e&l옐로우 쿠폰" with model data 32
+			if player's inventory has enough space for {_i}:
+				give 1 of {_i} to player
+				removepega(player, {_price}, "store")
+				message "&b■ 쿠폰을 성공적으로 구입했습니다!" to player
+			else:
+				message "&c■ 인벤토리 공간이 부족합니다." to player
+	else if location of event-block is {redguip}:
+		set {_price} to 200
+
+		if {_price} > {pega::%uuid of player%}:
+			message "&c■ 쿠폰을 구입하기 위한 페가가 부족합니다!" to player
+			stop
+		else:
+			set {_i} to paper named "&c&l레드 쿠폰" with model data 31
+			if player's inventory has enough space for {_i}:
+				give 1 of {_i} to player
+				removepega(player, {_price}, "store")
+				message "&b■ 쿠폰을 성공적으로 구입했습니다!" to player
+			else:
+				message "&c■ 인벤토리 공간이 부족합니다." to player			
+
+
+command /bujeok:
+	permission: op
+	trigger:
+		if player is op:
+			set {_item} to paper named "&6&l이동 부적" with model data 35
+			give 10 of {_item} to player
+			set {_item2} to leather named "&r&b특별한 천사 날개" with model data 8 with lore "&r&72차 공식 정모 참석자에게 지급되는 아이템"
+			give 1 of {_item2} to player
+			set {_item3} to paper named "&r&6일렉기타" with model data 36
+			set {_item4} to paper named "&r&f꽃다발" with model data 37
+			set {_item5} to paper named "&r&f꽃다발" with model data 38
+			set {_item6} to paper named "&r&f꽃다발" with model data 39
+			give 1 of {hatname::114} to player
+			give 1 of {_item3} to player
+			give 3 of {_item4} to player
+			give 3 of {_item5} to player
+			give 3 of {_item6} to player
+
+		else:
+			message "&c■ OP만 가능" to player
+			stop
+
+
+
+on damage:
+
+	if victim is item frame:
+		if "%nbt of victim% " contains "Invisible:1b":
+			set int tag "Invisible" of nbt of victim to 0
+			
+on break:
+	loop all entities in radius 1 around event-block:
+		if loop-entity is item frame:
+			if "%nbt of loop-entity% " contains "Invisible:1":
+				
+				set int tag "Invisible" of nbt of victim to 0
+
+command /gagu <integer>:
+	permission: op
+	trigger:
+		if player is op:
+			set {_item} to lime dye with model data arg-1
+			give 1 of {_item} to player
+
+command /gagulist1:
+	trigger:
+		if player's game mode is not creative:
+			message "&c■ 크리에이티브 모드에서만 사용할 수 있는 명령어입니다." to player
+			stop
+		set {_ss} to 0
+		if player's game mode is creative:
+			open chest inventory with 6 rows named "가구 목록 1" to player
+			set slot 0 of current inventory of player to lime dye with model data 1
+			set slot 1 of current inventory of player to lime dye with model data 2
+			set slot 2 of current inventory of player to lime dye with model data 3
+			set slot 3 of current inventory of player to lime dye with model data 4
+			set slot 4 of current inventory of player to lime dye with model data 5
+			set slot 5 of current inventory of player to lime dye with model data 6
+			set slot 6 of current inventory of player to lime dye with model data 7
+			set slot 7 of current inventory of player to lime dye with model data 8
+			set slot 8 of current inventory of player to lime dye with model data 9
+			set slot 9 of current inventory of player to lime dye with model data 10
+			set slot 10 of current inventory of player to lime dye with model data 11
+			set slot 11 of current inventory of player to lime dye with model data 12
+			set slot 12 of current inventory of player to lime dye with model data 13
+			set slot 13 of current inventory of player to lime dye with model data 14
+			set slot 14 of current inventory of player to lime dye with model data 15
+			set slot 15 of current inventory of player to lime dye with model data 16
+			set slot 16 of current inventory of player to lime dye with model data 17
+			set slot 17 of current inventory of player to lime dye with model data 18
+			set slot 18 of current inventory of player to lime dye with model data 19
+			set slot 19 of current inventory of player to lime dye with model data 20
+			set slot 20 of current inventory of player to lime dye with model data 241
+			set slot 21 of current inventory of player to lime dye with model data 320
+			set slot 22 of current inventory of player to lime dye with model data 633
+			set slot 23 of current inventory of player to lime dye with model data 723
+			set slot 24 of current inventory of player to lime dye with model data 724
+			set slot 25 of current inventory of player to lime dye with model data 725
+			set slot 26 of current inventory of player to lime dye with model data 726
+			set slot 27 of current inventory of player to lime dye with model data 751
+			set slot 28 of current inventory of player to lime dye with model data 752
+			set slot 29 of current inventory of player to lime dye with model data 753
+			set slot 30 of current inventory of player to lime dye with model data 754
+			set slot 31 of current inventory of player to lime dye with model data 755
+			set slot 32 of current inventory of player to lime dye with model data 756
+			set slot 33 of current inventory of player to lime dye with model data 757
+			set slot 34 of current inventory of player to lime dye with model data 758
+			set slot 35 of current inventory of player to lime dye with model data 759
+			set slot 36 of current inventory of player to lime dye with model data 839
+			set slot 37 of current inventory of player to lime dye with model data 864
+			set slot 38 of current inventory of player to lime dye with model data 881
+			set slot 39 of current inventory of player to lime dye with model data 909
+			set slot 40 of current inventory of player to lime dye with model data 942
+			set slot 41 of current inventory of player to lime dye with model data 1057
+			set slot 42 of current inventory of player to lime dye with model data 1106
+			set slot 43 of current inventory of player to lime dye with model data 1162
+			set slot 44 of current inventory of player to lime dye with model data 1169
+			set slot 45 of current inventory of player to lime dye with model data 1171
+			set slot 46 of current inventory of player to lime dye with model data 1215
+			set slot 47 of current inventory of player to lime dye with model data 1276
+			set slot 48 of current inventory of player to lime dye with model data 1486
+			set slot 49 of current inventory of player to lime dye with model data 1488
+			set slot 50 of current inventory of player to lime dye with model data 1491
+			set slot 51 of current inventory of player to lime dye with model data 1493
+			set slot 52 of current inventory of player to lime dye with model data 2073
+			set slot 53 of current inventory of player to lime dye with model data 2085
+command /gagulist2:
+	trigger:
+		if player's game mode is not creative:
+			message "&c■ 크리에이티브 모드에서만 사용할 수 있는 명령어입니다." to player
+			stop
+		set {_ss} to 0
+		if player's game mode is creative:
+			open chest inventory with 6 rows named "가구 목록 2" to player
+			set slot 1 of current inventory of player to lime dye with model data 2192
+			set slot 2 of current inventory of player to lime dye with model data 2203
+			set slot 3 of current inventory of player to lime dye with model data 2209
+			set slot 4 of current inventory of player to lime dye with model data 2215
+			set slot 5 of current inventory of player to lime dye with model data 2372
+			set slot 6 of current inventory of player to lime dye with model data 2373
+			set slot 7 of current inventory of player to lime dye with model data 2374
+			set slot 8 of current inventory of player to lime dye with model data 2378
+			set slot 9 of current inventory of player to lime dye with model data 2379
+			set slot 10 of current inventory of player to lime dye with model data 5005
+			set slot 11 of current inventory of player to lime dye with model data 5006
+			set slot 12 of current inventory of player to lime dye with model data 9000
+			set slot 13 of current inventory of player to lime dye with model data 9008
+			set slot 14 of current inventory of player to lime dye with model data 9012
+			set slot 15 of current inventory of player to lime dye with model data 9013
+			set slot 16 of current inventory of player to lime dye with model data 9010
+			set slot 17 of current inventory of player to lime dye with model data 9009
+			set slot 18 of current inventory of player to lime dye with model data 9014
+			set slot 19 of current inventory of player to lime dye with model data 9015
+			set slot 20 of current inventory of player to lime dye with model data 9016
+			set slot 21 of current inventory of player to lime dye with model data 9017
+			set slot 22 of current inventory of player to lime dye with model data 9018
+			set slot 23 of current inventory of player to lime dye with model data 9019
+			set slot 24 of current inventory of player to lime dye with model data 9020
+			set slot 25 of current inventory of player to lime dye with model data 9021
+			set slot 26 of current inventory of player to lime dye with model data 9022
+			set slot 27 of current inventory of player to lime dye with model data 9023
+			set slot 28 of current inventory of player to lime dye with model data 9024
+			set slot 29 of current inventory of player to lime dye with model data 9025
+			set slot 30 of current inventory of player to lime dye with model data 9026
+			set slot 31 of current inventory of player to lime dye with model data 9027
+			set slot 32 of current inventory of player to lime dye with model data 9028
+			set slot 33 of current inventory of player to lime dye with model data 9029
+			set slot 34 of current inventory of player to lime dye with model data 9042
+			set slot 35 of current inventory of player to lime dye with model data 9043
+			set slot 36 of current inventory of player to lime dye with model data 9011
+			set slot 37 of current inventory of player to lime dye with model data 9044
+			set slot 38 of current inventory of player to lime dye with model data 9045
+			set slot 39 of current inventory of player to lime dye with model data 9046
+			set slot 40 of current inventory of player to lime dye with model data 9047
+			set slot 41 of current inventory of player to lime dye with model data 9048
+			set slot 42 of current inventory of player to lime dye with model data 9049
+			set slot 43 of current inventory of player to lime dye with model data 9050
+			set slot 44 of current inventory of player to lime dye with model data 9051
+			set slot 45 of current inventory of player to lime dye with model data 9052
+			set slot 46 of current inventory of player to lime dye with model data 9053
+			set slot 47 of current inventory of player to lime dye with model data 9054
+			set slot 48 of current inventory of player to lime dye with model data 9055
+			set slot 49 of current inventory of player to lime dye with model data 9056
+			set slot 50 of current inventory of player to lime dye with model data 9057
+			set slot 51 of current inventory of player to lime dye with model data 9058
+			set slot 52 of current inventory of player to lime dye with model data 9059
+
+command /gagulist3:
+	trigger:
+		if player's game mode is not creative:
+			message "&c■ 크리에이티브 모드에서만 사용할 수 있는 명령어입니다." to player
+			stop
+		set {_ss} to 0
+		if player's game mode is creative:
+			open chest inventory with 6 rows named "가구 목록 3" to player
+			set slot 0 of current inventory of player to lime dye with model data 9060
+			set slot 1 of current inventory of player to lime dye with model data 9061
+			set slot 2 of current inventory of player to lime dye with model data 9062
+			set slot 3 of current inventory of player to lime dye with model data 9063
+			set slot 4 of current inventory of player to lime dye with model data 9068
+			set slot 5 of current inventory of player to lime dye with model data 9069
+			set slot 6 of current inventory of player to lime dye with model data 9070
+			set slot 7 of current inventory of player to lime dye with model data 9071
+			set slot 8 of current inventory of player to lime dye with model data 9072
+			set slot 9 of current inventory of player to lime dye with model data 9073
+			set slot 10 of current inventory of player to lime dye with model data 9074
+			set slot 11 of current inventory of player to lime dye with model data 9075
+			set slot 12 of current inventory of player to lime dye with model data 9076
+			set slot 13 of current inventory of player to lime dye with model data 9077
+			set slot 14 of current inventory of player to lime dye with model data 9078
+			set slot 15 of current inventory of player to lime dye with model data 9079
+			set slot 16 of current inventory of player to lime dye with model data 9080
+			set slot 17 of current inventory of player to lime dye with model data 9081
+			set slot 18 of current inventory of player to lime dye with model data 9082
+			set slot 19 of current inventory of player to lime dye with model data 9083
+			set slot 20 of current inventory of player to lime dye with model data 9084
+			set slot 21 of current inventory of player to lime dye with model data 9085
+			set slot 22 of current inventory of player to lime dye with model data 9086
+
+			set slot 23 of current inventory of player to lime dye with model data 9087
+			set slot 24 of current inventory of player to lime dye with model data 9088
+			set slot 25 of current inventory of player to lime dye with model data 9089
+			set slot 26 of current inventory of player to lime dye with model data 9090
+			set slot 27 of current inventory of player to lime dye with model data 9091
+			set slot 28 of current inventory of player to lime dye with model data 9092
+			set slot 29 of current inventory of player to lime dye with model data 9093
+			set slot 30 of current inventory of player to lime dye with model data 9094
+			set slot 31 of current inventory of player to lime dye with model data 9095
+			set slot 32 of current inventory of player to lime dye with model data 9096
+			set slot 33 of current inventory of player to lime dye with model data 9097
+			set slot 34 of current inventory of player to lime dye with model data 9098
+			set slot 35 of current inventory of player to lime dye with model data 9099
+			set slot 36 of current inventory of player to lime dye with model data 9100
+			set slot 37 of current inventory of player to lime dye with model data 9101
+			set slot 38 of current inventory of player to lime dye with model data 9102
+			set slot 39 of current inventory of player to lime dye with model data 9103
+			set slot 40 of current inventory of player to lime dye with model data 9104
+			set slot 41 of current inventory of player to lime dye with model data 9105
+			set slot 42 of current inventory of player to lime dye with model data 9106
+			set slot 43 of current inventory of player to lime dye with model data 9107
+			set slot 44 of current inventory of player to lime dye with model data 9108
+			set slot 45 of current inventory of player to lime dye with model data 9109
+			set slot 46 of current inventory of player to lime dye with model data 9110
+			set slot 47 of current inventory of player to lime dye with model data 9111
+			set slot 48 of current inventory of player to lime dye with model data 9112
+			set slot 49 of current inventory of player to lime dye with model data 9113
+			set slot 50 of current inventory of player to lime dye with model data 9114
+
+			set slot 51 of current inventory of player to lime dye with model data 9115
+			set slot 52 of current inventory of player to lime dye with model data 9116
+			set slot 53 of current inventory of player to lime dye with model data 9117
+			
+
+		
+command /gagulist4:
+	trigger:
+		if player's game mode is not creative:
+			message "&c■ 크리에이티브 모드에서만 사용할 수 있는 명령어입니다." to player
+			stop
+		set {_ss} to 0
+		if player's game mode is creative:
+			open chest inventory with 6 rows named "가구 목록 4" to player
+			set slot 0 of current inventory of player to lime dye with model data 9118
+			set slot 1 of current inventory of player to lime dye with model data 9119
+			set slot 2 of current inventory of player to lime dye with model data 9120
+			set slot 3 of current inventory of player to lime dye with model data 9121
+
+			set slot 4 of current inventory of player to lime dye with model data 9122
+			set slot 5 of current inventory of player to lime dye with model data 9123
+
+			set slot 6 of current inventory of player to lime dye with model data 9124
+			set slot 7 of current inventory of player to lime dye with model data 9125
+
+			set slot 8 of current inventory of player to lime dye with model data 9126
+			set slot 9 of current inventory of player to lime dye with model data 9127
+
+			set slot 10 of current inventory of player to lime dye with model data 9128
+			set slot 11 of current inventory of player to lime dye with model data 9129
+
+			set slot 12 of current inventory of player to lime dye with model data 9130
+			set slot 13 of current inventory of player to lime dye with model data 9131
+			set slot 14 of current inventory of player to lime dye with model data 9132
+			set slot 15 of current inventory of player to lime dye with model data 9133
+			set slot 16 of current inventory of player to lime dye with model data 9134
+			set slot 17 of current inventory of player to lime dye with model data 9135
+			set slot 18 of current inventory of player to lime dye with model data 9136
+			set slot 19 of current inventory of player to lime dye with model data 9137
+			set slot 20 of current inventory of player to lime dye with model data 9138
+
+			set slot 21 of current inventory of player to lime dye with model data 9139
+
+
+			set slot 22 of current inventory of player to lime dye with model data 9140
+			set slot 23 of current inventory of player to lime dye with model data 9141
+			set slot 24 of current inventory of player to lime dye with model data 9142
+			set slot 25 of current inventory of player to lime dye with model data 9143
+			set slot 26 of current inventory of player to lime dye with model data 9144
+			set slot 27 of current inventory of player to lime dye with model data 9145
+			set slot 28 of current inventory of player to lime dye with model data 9146
+			set slot 29 of current inventory of player to lime dye with model data 9147
+			set slot 30 of current inventory of player to lime dye with model data 9148
+			set slot 31 of current inventory of player to lime dye with model data 9149
+			set slot 32 of current inventory of player to lime dye with model data 9150
+			set slot 33 of current inventory of player to lime dye with model data 9151
+			set slot 34 of current inventory of player to lime dye with model data 9152
+			set slot 35 of current inventory of player to lime dye with model data 9153
+			set slot 36 of current inventory of player to lime dye with model data 9154
+			set slot 37 of current inventory of player to lime dye with model data 9155
+			set slot 38 of current inventory of player to lime dye with model data 9156
+			set slot 39 of current inventory of player to lime dye with model data 9157
+			set slot 40 of current inventory of player to lime dye with model data 9158
+			set slot 41 of current inventory of player to lime dye with model data 9159
+			set slot 42 of current inventory of player to lime dye with model data 9160
+
+
+			set slot 43 of current inventory of player to lime dye with model data 9162
+
+			set slot 44 of current inventory of player to lime dye with model data 9163
+			set slot 45 of current inventory of player to lime dye with model data 9164
+			set slot 46 of current inventory of player to lime dye with model data 9165
+			set slot 47 of current inventory of player to lime dye with model data 9166
+
+
+			set slot 48 of current inventory of player to lime dye with model data 9167
+			set slot 49 of current inventory of player to lime dye with model data 9168
+			set slot 50 of current inventory of player to lime dye with model data 9169
+
+			set slot 51 of current inventory of player to lime dye with model data 9170
+			set slot 52 of current inventory of player to lime dye with model data 9171
+			set slot 53 of current inventory of player to lime dye with model data 9172
+
+command /gagulist5:
+	trigger:
+		if player's game mode is not creative:
+			message "&c■ 크리에이티브 모드에서만 사용할 수 있는 명령어입니다." to player
+			stop
+		set {_ss} to 0
+		if player's game mode is creative:
+			open chest inventory with 6 rows named "가구 목록 5" to player
+			set slot 0 of current inventory of player to lime dye with model data 9173
+			set slot 1 of current inventory of player to lime dye with model data 9174
+			set slot 2 of current inventory of player to lime dye with model data 9175
+			set slot 3 of current inventory of player to lime dye with model data 9176
+
+			set slot 4 of current inventory of player to lime dye with model data 9177
+			set slot 5 of current inventory of player to lime dye with model data 9178
+
+			set slot 6 of current inventory of player to lime dye with model data 9179
+			set slot 7 of current inventory of player to lime dye with model data 9180
+
+
+			set slot 8 of current inventory of player to lime dye with model data 9181
+			set slot 9 of current inventory of player to lime dye with model data 9182
+			set slot 10 of current inventory of player to lime dye with model data 9183
+			set slot 11 of current inventory of player to lime dye with model data 9184
+
+
+			set slot 12 of current inventory of player to lime dye with model data 9185
+			set slot 13 of current inventory of player to lime dye with model data 9186
+			set slot 14 of current inventory of player to lime dye with model data 9187
+			set slot 15 of current inventory of player to lime dye with model data 9188
+			set slot 16 of current inventory of player to lime dye with model data 9189
+			set slot 17 of current inventory of player to lime dye with model data 9190
+			set slot 18 of current inventory of player to lime dye with model data 9191
+			set slot 19 of current inventory of player to lime dye with model data 9192
+			set slot 20 of current inventory of player to lime dye with model data 9193
+
+			set slot 21 of current inventory of player to lime dye with model data 9194
+
+
+			set slot 22 of current inventory of player to lime dye with model data 9195
+			set slot 23 of current inventory of player to lime dye with model data 9196
+			set slot 24 of current inventory of player to lime dye with model data 9197
+			set slot 25 of current inventory of player to lime dye with model data 9198
+			set slot 26 of current inventory of player to lime dye with model data 9199
+			set slot 27 of current inventory of player to lime dye with model data 9200
+			set slot 28 of current inventory of player to lime dye with model data 9201
+			set slot 29 of current inventory of player to lime dye with model data 9202
+
+
+			set slot 30 of current inventory of player to lime dye with model data 9203
+			set slot 31 of current inventory of player to lime dye with model data 9204
+			
+			set slot 32 of current inventory of player to lime dye with model data 9205
+			set slot 33 of current inventory of player to lime dye with model data 9206
+
+
+
+			set slot 34 of current inventory of player to lime dye with model data 9207
+			set slot 35 of current inventory of player to lime dye with model data 9208
+			
+			set slot 36 of current inventory of player to lime dye with model data 9209
+			set slot 37 of current inventory of player to lime dye with model data 9210
+
+
+			set slot 38 of current inventory of player to lime dye with model data 9211
+			set slot 39 of current inventory of player to lime dye with model data 9212
+			set slot 40 of current inventory of player to lime dye with model data 9213
+
+			set slot 41 of current inventory of player to lime dye with model data 9214
+			set slot 42 of current inventory of player to lime dye with model data 9215
+			set slot 43 of current inventory of player to lime dye with model data 9216
+			set slot 44 of current inventory of player to lime dye with model data 9217
+			set slot 45 of current inventory of player to lime dye with model data 9218
+			set slot 46 of current inventory of player to lime dye with model data 9219
+			set slot 47 of current inventory of player to lime dye with model data 9220
+			set slot 48 of current inventory of player to lime dye with model data 9221
+			set slot 49 of current inventory of player to lime dye with model data 9222
+			set slot 50 of current inventory of player to lime dye with model data 9223
+			set slot 51 of current inventory of player to lime dye with model data 9224
+			set slot 52 of current inventory of player to lime dye with model data 9225
+			set slot 53 of current inventory of player to lime dye with model data 9226
+
+command /gagulist6:
+	trigger:
+		if player's game mode is not creative:
+			message "&c■ 크리에이티브 모드에서만 사용할 수 있는 명령어입니다." to player
+			stop
+		set {_ss} to 0
+		if player's game mode is creative:
+			open chest inventory with 6 rows named "가구 목록 6" to player
+			set slot 0 of current inventory of player to lime dye with model data 9227
+			set slot 1 of current inventory of player to lime dye with model data 9228
+			set slot 2 of current inventory of player to lime dye with model data 9229
+			set slot 3 of current inventory of player to lime dye with model data 9230
+			set slot 4 of current inventory of player to lime dye with model data 9231
+			set slot 5 of current inventory of player to lime dye with model data 9232
+			set slot 6 of current inventory of player to lime dye with model data 9233
+
+			set slot 7 of current inventory of player to lime dye with model data 9234
+			set slot 8 of current inventory of player to lime dye with model data 9235
+			set slot 9 of current inventory of player to lime dye with model data 9236
+			set slot 10 of current inventory of player to lime dye with model data 9237
+			set slot 11 of current inventory of player to lime dye with model data 9238
+			set slot 12 of current inventory of player to lime dye with model data 9239
+			set slot 13 of current inventory of player to lime dye with model data 9240
+
+			set slot 14 of current inventory of player to lime dye with model data 9241
+			set slot 15 of current inventory of player to lime dye with model data 9242
+			set slot 16 of current inventory of player to lime dye with model data 9243
+			set slot 17 of current inventory of player to lime dye with model data 9244
+			set slot 18 of current inventory of player to lime dye with model data 9245
+			set slot 19 of current inventory of player to lime dye with model data 9246
+			set slot 20 of current inventory of player to lime dye with model data 9247
+
+			set slot 21 of current inventory of player to lime dye with model data 9248
+			set slot 22 of current inventory of player to lime dye with model data 9249
+			set slot 23 of current inventory of player to lime dye with model data 9250
+			set slot 24 of current inventory of player to lime dye with model data 9251
+			set slot 25 of current inventory of player to lime dye with model data 9252
+			set slot 26 of current inventory of player to lime dye with model data 9253
+			set slot 27 of current inventory of player to lime dye with model data 9254
+
+			set slot 28 of current inventory of player to lime dye with model data 9255
+			set slot 29 of current inventory of player to lime dye with model data 9256
+			set slot 30 of current inventory of player to lime dye with model data 9257
+
+
+			set slot 31 of current inventory of player to lime dye with model data 9258
+			set slot 32 of current inventory of player to lime dye with model data 9259
+			set slot 33 of current inventory of player to lime dye with model data 9260
+			
+			set slot 34 of current inventory of player to lime dye with model data 9262
+			set slot 35 of current inventory of player to lime dye with model data 9263
+			set slot 36 of current inventory of player to lime dye with model data 9264
+			set slot 37 of current inventory of player to lime dye with model data 9265
+
+			set slot 38 of current inventory of player to lime dye with model data 9267
+			set slot 39 of current inventory of player to lime dye with model data 9268
+
+			set slot 40 of current inventory of player to lime dye with model data 9269
+			set slot 41 of current inventory of player to lime dye with model data 9270
+			set slot 42 of current inventory of player to lime dye with model data 9271
+			set slot 43 of current inventory of player to lime dye with model data 9272
+			set slot 44 of current inventory of player to lime dye with model data 9273
+			set slot 45 of current inventory of player to lime dye with model data 9274
+			set slot 46 of current inventory of player to lime dye with model data 9275
+			set slot 47 of current inventory of player to lime dye with model data 9276
+			set slot 48 of current inventory of player to lime dye with model data 9277
+			set slot 49 of current inventory of player to lime dye with model data 9278
+			set slot 50 of current inventory of player to lime dye with model data 9280
+
+
+
+
+on right click on entity:
+	if player is op:
+		if event-entity is armor stand:
+			if player is sneaking:
+				set int tag "NoGravity" of nbt of event-entity to 1
+				set int tag "Invisible" of nbt of event-entity to 1
+				add "{Pose:{Head:[0f,360f,0f]}}" to nbt of event-entity
+				set helmet of event-entity to player's tool

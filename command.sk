@@ -1,0 +1,114 @@
+command /s:
+	trigger:		
+		message "&e■ 3초 후 스폰으로 이동합니다..." to player
+		if player is not op:
+			send title "&e스폰으로 이동 중" to player for 3 seconds with fadein 0 second and fade out 0 second
+			wait 1 seconds
+			send title "&e스폰으로 이동 중." to player for 3 seconds with fadein 0 second and fade out 0 second
+			wait 1 seconds
+			send title "&e스폰으로 이동 중." to player for 3 seconds with fadein 0 second and fade out 0 second
+			wait 1 seconds
+		if player's vehicle is set:
+			message "&c■ 어딘가에 앉아서 사용할 수 없는 명령어입니다." to player
+			stop
+		else:
+			execute console command "/spawn %player%"
+			message "&e■ 스폰으로 이동하였습니다" to player
+
+
+command /h:
+	trigger:
+		if player is sneaking:
+			message "&c■ 어딘가에 앉아서 사용할 수 없는 명령어입니다." to player
+			stop
+
+		if {home::%uuid of player%} is set:
+			if player is op:
+				set {_per} to 1
+			if {major::%uuid of player%} is 8:
+				set {_per} to 1
+			if {_per} is not 1:
+				message "&b■ 3초 후 홈으로 이동합니다..." to player
+				send title "&b홈으로 이동 중" to player for 3 seconds with fadein 0 second and fade out 0 second
+				wait 1 seconds
+				send title "&b홈으로 이동 중." to player for 3 seconds with fadein 0 second and fade out 0 second
+				wait 1 seconds
+				send title "&b홈으로 이동 중.." to player for 3 seconds with fadein 0 second and fade out 0 second
+				wait 1 seconds
+			if player's vehicle is set:
+				message "&c■ 어딘가에 앉아서 사용할 수 없는 명령어입니다." to player
+				stop
+			else:
+				teleport player to {home::%uuid of player%}
+				message "&b■ 당신의 홈에 도착했습니다." to player
+		else:
+			message "&c■ 홈을 지정(/sh)해주세요." to player
+
+command /sh:
+	trigger:
+		if "%player's world%" contains "world":
+			set {_x} to 0
+		else:
+			message "&c■ 해당 월드에서는 사용할 수 없는 명령어입니다." to player
+			stop
+		set {home::%uuid of player%} to player's location
+		message "&b■ 당신의 홈을 지정했습니다." to player
+
+		
+
+command /trash:
+	trigger:
+		open chest with 3 rows named "&l쓰레기통 (복구 불가)" to player
+
+command /noticelagg:
+	permission: op
+	trigger:
+		if player is not op:
+			message "&c■ 관리자만 사용 가능한 명령어입니다." to player
+			stop
+		loop all players:
+			send title "&d잠시 &b렉&d이 걸릴 수 있습니다!" to loop-player for 5 seconds
+
+command /jamsu:
+	trigger:
+		execute player command "/afk"
+
+
+
+on command "/chest":
+	if {com::%player%} is not 1:
+		if player is not op:
+			cancel event
+
+on command "/ironicchest:chest":
+	if {com::%player%} is not 1:
+		cancel event
+
+on command "/ironicchest":
+	if {com::%player%} is not 1:
+		cancel event
+
+on command "/ironicchest:ironicchest":
+	if {com::%player%} is not 1:
+		cancel event
+
+on command "/ironicchest:ichestone":
+	if {com::%player%} is not 1:
+		cancel event	
+
+on command "/ichestone":
+	if {com::%player%} is not 1:
+		cancel event
+	
+on command "/chestone":
+	if {com::%player%} is not 1:
+		cancel event
+
+on command "/ironicchest:chestone":
+	if {com::%player%} is not 1:
+		cancel event	
+
+on command "/ironicchest:chesttwo":
+	if {com::%player%} is not 1:
+		cancel event	
+
