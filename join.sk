@@ -1,8 +1,14 @@
 on join:
-    #if player is not op:
-    #    broadcast "&c■ OP가 아닌 유저(%player%)&c의 접속으로 킥 처리합니다."
-    #    kick player due to "&c현재 준비 중이므로 오피가 아닌 유저는 킥 처리합니다."
-    #    stop
+#    if player is not op:
+#        broadcast "&c■ OP가 아닌 유저(%player%)&c의 접속으로 킥 처리합니다."
+#        kick player due to "&c현재 시즌5 준비 중이므로 오피가 아닌 유저는 접속이 어렵습니다."
+#        stop
+
+    if {nick::%uuid of player%} is set:
+        set join message to "&a&l[+] &r%{nick::%uuid of player%}%&r&7(%player%)&e님의 등장!"
+    else:
+        set join message to "&a&l[+] &r%player%&r&7(%player%)&e님의 등장!"
+
 
     set {_ismember} to text from "http://mc.yu.ac.kr/ismember.php?uuid=%uuid of player%"
     if "%{_ismember}%" contains "YESYESYES":
@@ -20,3 +26,9 @@ on join:
         broadcast "&c■ 허가되지 않은 플레이어(%player%)&c의 접속으로 킥 처리합니다."
         kick player due to "&cYUMC 공식 홈페이지에서 회원가입(영대생 인증)이 필요한 플레이어입니다. 문제가 있는 경우 관리자에게 문의하세요."
         stop
+	
+on quit:
+	if {nick::%uuid of player%} is set:
+		set quit message to "&c&l[-] &r%{nick::%uuid of player%}%&r&7(%player%)&e님의 퇴장!"
+	else:
+		set quit message to "&c&l[-] &r%player%&r&7(%player%)&e님의 퇴장!"

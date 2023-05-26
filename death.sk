@@ -1,0 +1,3 @@
+on death:
+    set the death message to "&7&l[&r&7☠&7&l] &7%{nick::%uuid of victim%}%&7님이 죽었습니다 ········ &7[사유 : %damage cause%]"
+

@@ -148,7 +148,7 @@ command /party [<text>] [<text>] [<text>]:
             if player is op:
                 set {_party} to arg 2
                 delete {party::%{_party}%}
-                delete {party::%{_party}%::members}
+                delete {party::%{_party}%::members::*}
                 delete {party::%{_party}%::owner}
                 message "성공함" to player
         else if arg 1 is "selectTestDelete":
@@ -156,20 +156,30 @@ command /party [<text>] [<text>] [<text>]:
                 set {_party} to arg 2
                 set {_player} to HangulToUUID(arg 3)
                 # 파티 초기화, 파티장 초기화, 파티 멤버 초기화
-                remove {_party} from {partylist::%{_player}%::*}
+                
                 loop {party::%{_party}%::members::*}:
                     #FIXME: 리스트에서 제거가 안 됨. UUID 받은 거 맞나 모르겠음
                     #이유를 찾았다. 애초에 파티멤버가 초기화되어 있었네 ㅋㅋㅋㅋㅋㅋㅋㅋ 그러니까 제거가 안 됐지
                     set {_memberValue} to HangulToUUID(loop-value)
                     remove {_party} from {partylist::%{_memberValue}%::*}
                     remove loop-value from {party::%{_party}%::members}
-                
+                remove {_party} from {partylist::%{_player}%::*}
                 delete {party::%{_party}%}
                 delete {party::%{_party}%::members::*}
                 delete {party::%{_party}%::owner}
                 message "성공적으로 제거되었습니다." to player
                 delete {resetValue::%player%}
                 delete {resetValueParty::%player%}
+
+
+        #csv 파일에 확인하고 변수명 그대로 복사해와서 arg 2에 넣으면 그 변수 제거
+        else if arg 1 is "opdel":
+            if player is op:
+                message "%{%arg 2%}%" to player
+                delete {%arg 2%}
+                
+
+
 
 
         
@@ -224,12 +234,12 @@ command /ptdelete [<text>]:
                     set {_party} to {resetValueParty::%player%}
                     set {_player} to uuid of player
                     # 파티 초기화, 파티장 초기화, 파티 멤버 초기화
-                    remove {_party} from {partylist::%{_player}%::*}
+                    
                     loop {party::%{_party}%::members::*}:
                         set {_memberValue} to HangulToUUID(loop-value)
                         remove {_party} from {partylist::%{_memberValue}%::*}
                         remove loop-value from {party::%{_party}%::members}
-                    
+                    remove {_party} from {partylist::%{_player}%::*}
                     delete {party::%{_party}%}
                     delete {party::%{_party}%::members::*}
                     delete {party::%{_party}%::owner}
