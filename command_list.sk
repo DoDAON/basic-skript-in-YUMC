@@ -1,0 +1,14 @@
+command /cl:
+    trigger:
+        send "&6=== 명령어 목록 ===" to player
+        send "&e/cl &7- 명령어 목록을 확인합니다" to player
+        send "&e/1 &7- 전체 채팅 모드로 전환합니다 " to player
+        send "&e/2 &7- 주변 채팅 모드로 전환합니다 " to player
+        send "&e/land &7- 토지 구매 " to player
+        send "&e/party &7- 파티 생성 및 관리" to player
+        send "&e/s &7- 캠퍼스 스폰으로 이동" to player
+        send "&e/sh &7- 자신의 홈을 지정합니다 " to player
+        send "&e/h &7- 자신의 홈으로 이동합니다 " to player
+        send "&e/trash &7- 쓰레기통 열기 " to player
+        send "&e/crawl &7- 엎드리기 " to player
+        send "&e/sit &7- 앉기 " to player
