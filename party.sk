@@ -57,6 +57,7 @@ command /party [<text>] [<text>] [<text>]:
                         loop {party::%{_party}%::members::*}:
                             if {_player} is loop-value:
                                 set {_key} to true
+                                exit loop
                             else:
                                 set {_key} to false
                         if {_key} is true:
@@ -66,11 +67,35 @@ command /party [<text>] [<text>] [<text>]:
                         else:
                             message "해당 플레이어는 파티에 존재하지 않습니다. 다시 입력해주세요." to player
                     else:
-                        message "파티장을 추방할 수 없습니다!" to player
+                        message "&e파티장&f을 추방할 수 없습니다!" to player
                 else:
                     message "당신은 파티장이 아닙니다!" to player
             else:
                 message "사용법: /party expel <파티 이름> <유저 한글 이름>" to player
+
+        #파티 탈퇴: /party exit <파티 이름>
+        else if arg 1 is "exit":
+            if arg 2 is set:
+                set {_party} to arg 2
+                set {_player} to uuid of player
+                if {_player} is not {party::%{_party}%::owner}:
+                    loop {party::%{_party}%::members::*}:
+                        if {_player} is loop-value:
+                            set {_key} to true
+                            exit loop
+                        else:
+                            set {_key} to false
+                    if {_key} is true:
+                        remove {_player} from {party::%{_party}%::members::*}
+                        remove {_party} from {partylist::%{_player}%::*}
+                        message "파티 %{_party}%(을)를 탈퇴하였습니다." to player
+                    else:
+                        message "당신은 해당 파티에 존재하지 않습니다! 파티명을 다시 확인해주세요." to player
+                else:
+                    message "당신은 &e파티장&f입니다. 파티장은 파티에서 나갈 수 없습니다." to player
+            else:
+                message "사용법: /party exit <파티 이름>" to player
+
 
 
         #TODO: 파티 제거 /party delete [파티이름] //// 한 번 더 확인문구도 출력
@@ -110,6 +135,7 @@ command /party [<text>] [<text>] [<text>]:
                         loop {party::%{_party}%::members::*}:
                             if {_name} is loop-value:
                                 set {_key2} to true
+                                exit loop
                             else:
                                 set {_key2} to false
                         if {_key2} is true:
@@ -138,11 +164,19 @@ command /party [<text>] [<text>] [<text>]:
                     set {_print} to "%{_print}%%loop-value%, "
                 message "%{_print}%" to player
                 #message "%{party::}%
-        
+
+        else if arg 1 is "testAllmb":
+            if player is op:
+                set {_party} to arg 2
+                message "%{party::%{_party}%::members::*}%" to player
+                loop {party::%{_party}%::members::*}:
+                    set {_testMB} to loop-value
+                    message "%{nick::%{_testMB}%}%" to player
         else if arg 1 is "testowner":
             if player is op:
                 set {_owner} to {party::%arg 2%::owner}
                 message "%{_owner}%" to player
+                message "%{nick::%{_owner}%}%" to player
 
         else if arg 1 is "testdeletept":
             if player is op:
@@ -162,7 +196,7 @@ command /party [<text>] [<text>] [<text>]:
                     #이유를 찾았다. 애초에 파티멤버가 초기화되어 있었네 ㅋㅋㅋㅋㅋㅋㅋㅋ 그러니까 제거가 안 됐지
                     set {_memberValue} to HangulToUUID(loop-value)
                     remove {_party} from {partylist::%{_memberValue}%::*}
-                    remove loop-value from {party::%{_party}%::members}
+                    remove loop-value from {party::%{_party}%::members::*}
                 remove {_party} from {partylist::%{_player}%::*}
                 delete {party::%{_party}%}
                 delete {party::%{_party}%::members::*}
@@ -183,6 +217,7 @@ command /party [<text>] [<text>] [<text>]:
 
 
         
+        #TODO: 파티 중복 이름 제거
         else if arg 1 is "list":
             set {_player} to uuid of player
             #set {_party} to arg 2
@@ -200,6 +235,7 @@ command /party [<text>] [<text>] [<text>]:
                 loop {partylist::%{_name}%::*}:
                     if {_party} is loop-value:
                         set {_key} to true
+                        exit loop
                     else:
                         set {_key} to false
                 if {_key} is true:
@@ -219,6 +255,7 @@ command /party [<text>] [<text>] [<text>]:
             message "파티 생성: /party create <파티 이름>" to player
             message "파티원 추가: /party add <파티 이름> <유저 한글 이름>" to player
             message "파티원 추방: /party expel <파티 이름> <유저 한글 이름>" to player
+            message "파티 탈퇴: /party exit <파티 이름>" to player
             message "파티장 양도: /party handover <파티 이름> <유저 한글 이름>" to player
             message "파티 제거: /party delete <파티 이름>" to player
             message "속한 파티 확인: /party list" to player
@@ -238,7 +275,8 @@ command /ptdelete [<text>]:
                     loop {party::%{_party}%::members::*}:
                         set {_memberValue} to HangulToUUID(loop-value)
                         remove {_party} from {partylist::%{_memberValue}%::*}
-                        remove loop-value from {party::%{_party}%::members}
+                        remove {_memberValue} from {party::%{_party}%::members::*}
+                        remove loop-value from {party::%{_party}%::members::*}
                     remove {_party} from {partylist::%{_player}%::*}
                     delete {party::%{_party}%}
                     delete {party::%{_party}%::members::*}

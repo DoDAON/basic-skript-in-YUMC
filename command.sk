@@ -41,6 +41,16 @@ command /h:
 			else:
 				teleport player to {home::%uuid of player%}
 				message "&b■ 당신의 홈에 도착했습니다." to player
+				wait 2 ticks
+				set {_chunk} to chunk at {home::%uuid of player%}
+				if {owned_chunk::%{_chunk}%} is set:
+					if {owned_chunk::%{_chunk}%} is not uuid of player:
+						delete {home::%uuid of player%}
+						message "&4---------<경고>---------" to player
+						message "&4현재 집이 위치한 곳은 &e타인의 땅&4입니다." to player
+						message "&4해당 위치의 Home이 사라졌습니다!!" to player
+						message "&a자신의 토지&f에서 Home을 지정하는 것을 권장하고 있습니다." to player
+						message "&4-----------------------" to player
 		else:
 			message "&c■ 홈을 지정(/sh)해주세요." to player
 
@@ -51,8 +61,13 @@ command /sh:
 		else:
 			message "&c■ 해당 월드에서는 사용할 수 없는 명령어입니다." to player
 			stop
-		set {home::%uuid of player%} to player's location
-		message "&b■ 당신의 홈을 지정했습니다." to player
+		set {_chunk} to chunk at player
+		if {owned_chunk::%{_chunk}%} is set:
+			if {owned_chunk::%{_chunk}%} is not uuid of player:
+				message "&e타인의 토지에 홈을 지정할 수 없습니다!" to player	
+			else:
+				set {home::%uuid of player%} to player's location
+				message "&b■ 당신의 홈을 지정했습니다." to player
 
 		
 
@@ -72,6 +87,12 @@ command /noticelagg:
 command /jamsu:
 	trigger:
 		execute player command "/afk"
+
+
+
+
+
+
 
 
 
@@ -111,4 +132,9 @@ on command "/ironicchest:chestone":
 on command "/ironicchest:chesttwo":
 	if {com::%player%} is not 1:
 		cancel event	
+
+
+
+
+
 

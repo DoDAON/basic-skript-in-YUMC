@@ -28,5 +28,5 @@ on region enter:
     else if "%region at player%" contains "libinside":
         execute console command "/warp libOutWarp %player%"
     #캠퍼스 -> 야생
-    else if "%region at player%" contains "dokdo":
-        teleport player to spawn of "world"
+    #else if "%region at player%" contains "dokdo":
+        #teleport player to spawn of "world"

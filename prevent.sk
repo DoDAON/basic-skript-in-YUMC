@@ -9,11 +9,32 @@ on command:
 		if {level::%uuid of player%} is 0:
 			cancel event
 
+
+
+
 on break of item frame:
-	if "%item of event-entity%" contains "air":
-		stop
-	else:
-		cancel event
+	if player's world is "campus":
+		if player is not op:
+			if "%item of event-entity%" contains "air":
+				cancel event
+			else:
+				cancel event
+
+on damage:
+	if damager's world is "campus":
+		if damager is not op:
+			if victim is item frame:
+				cancel event
+
+on rightclick:
+	if player's world is "campus":
+		if player is not op:
+			if event-entity is item frame:
+				cancel event
+
+
+
+
 
 on break of painting:
 	if player is not set:

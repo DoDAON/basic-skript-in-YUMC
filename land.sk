@@ -2,25 +2,40 @@ command /land [<text>]:
     description: 현재 청크 위치를 표시합니다.
     trigger:
         if player's world is not "campus":
-            set {_chunk} to chunk at player
-            set {_owner} to {owned_chunk::%{_chunk}%}
-            if {_owner} is not set:
-                if arg 1 is not set:
-                    set {_chunk} to chunk at player
-                    message "현재 청크: (%{_chunk}%의 x 좌표, %{_chunk}%의 z 좌표)" to player
-                    message "&e토지 구매를 희망할 시 &f/land buy&e를 입력해주세요." to player
-                if arg 1 is "buy":
-                    if player has 1 diamond:
-                        remove 1 diamond from player
+            if player's world is not "world_nether":
+                set {_chunk} to chunk at player
+                set {_owner} to {owned_chunk::%{_chunk}%}
+                if {_owner} is not set:
+                    if arg 1 is not set:
                         set {_chunk} to chunk at player
-                        set {owned_chunk::%{_chunk}%} to uuid of player
-                        message "땅 구매 완료!" to player
-                    else:
-                        message "다이아몬드가 부족합니다." to player
+                        message "현재 청크: (%{_chunk}%의 x 좌표, %{_chunk}%의 z 좌표)" to player
+                        message "&e토지 구매를 희망할 시 &f/land buy&e를 입력해주세요." to player
+                    else if arg 1 is "buy":
+                        if player has 1 diamond:
+                            remove 1 diamond from player
+                            set {_chunk} to chunk at player
+                            set {owned_chunk::%{_chunk}%} to uuid of player
+                            message "&e땅 구매 완료!" to player
+                        else:
+                            message "다이아몬드가 부족합니다." to player
+                else if {_owner} is set:
+                    if arg 1 is not set:
+                        message "현재 청크: (%{_chunk}%의 x 좌표, %{_chunk}%의 z 좌표)" to player
+                        message "&e토지 판매를 희망할 시 &f/land sell&e를 입력해주세요." to player
+                    else if arg 1 is "sell":
+                        if {owned_chunk::%{_chunk}%} is uuid of player:
+                            set {_chunk} to chunk at player
+                            delete {owned_chunk::%{_chunk}%}
+                            message "&e땅 판매 완료!" to player
+                        else:
+                            message "&4(경고) 타인의 땅을 판매할 수 없습니다!" to player
+                #토지 판매
+                
+            else:
+                message "네더 월드에서는 토지를 구매하실 수 없습니다." to player
         else:
             message "캠퍼스월드에서는 토지를 구매하실 수 없습니다." to player
 
-            
 
 
 on place:
@@ -29,16 +44,20 @@ on place:
     set {_owner} to {owned_chunk::%{_chunk}%}
 
     loop {partylist::%{_owner}%::*}:
-        loop {party::%loop-value-1%::members::*}:
-            if uuid of player is loop-value-2:
-                set {_test} to true
-            else:
-                set {_test} to false
+        if {_test} is true:
+            exit loop
+        if {_owner} is {party::%loop-value-1%::owner}:
+            loop {party::%loop-value-1%::members::*}:
+                if uuid of player is loop-value-2:
+                    set {_test} to true
+                    exit loop
+                else:
+                    set {_test} to false
 
 
     #set {_isinParty::*} to {partylist::%{_owner}%::*}
     if {_test} is false:
-        if {_owner} is set:  
+        if {_owner} is set:
             if {_owner} is not uuid of player:
                 cancel event
                 message "타인의 땅에서 블록을 설치할 수 없습니다." to player
@@ -48,16 +67,24 @@ on break:
     set {_chunk} to chunk at event-block
     set {_owner} to {owned_chunk::%{_chunk}%}
     loop {partylist::%{_owner}%::*}:
-        loop {party::%loop-value-1%::members::*}:
-            if uuid of player is loop-value-2:
-                set {_test} to true
-            else:
-                set {_test} to false
+        if {_test} is true:
+            exit loop
+        if {_owner} is {party::%loop-value-1%::owner}:
+            loop {party::%loop-value-1%::members::*}:
+                if uuid of player is loop-value-2:
+                    set {_test} to true
+                    exit loop
+                else:
+                    set {_test} to false
+    
     if {_test} is false:
-        if {_owner} is set:  
+        if {_owner} is set:
             if {_owner} is not uuid of player:
                 cancel event
                 message "타인의 땅에서 블록을 파괴할 수 없습니다." to player
+
+
+
 
 
 on rightclick:
@@ -65,24 +92,274 @@ on rightclick:
     set {_chunk} to chunk at event-block
     set {_owner} to {owned_chunk::%{_chunk}%}
     loop {partylist::%{_owner}%::*}:
-        loop {party::%loop-value-1%::members::*}:
-            if uuid of player is loop-value-2:
-                set {_test} to true
-            else:
-                set {_test} to false
+        if {_test} is true:
+            exit loop
+        if {_owner} is {party::%loop-value-1%::owner}:
+            loop {party::%loop-value-1%::members::*}:
+                if uuid of player is loop-value-2:
+                    set {_test} to true
+                    exit loop
+                else:
+                    set {_test} to false
+    if player is not op:
+        if {_test} is false:
+            if event-block is chest:
+                if {_owner} is set:
+                    if {_owner} is not uuid of player:
+                        cancel event
+                        message "타인의 상자에 접근할 수 없습니다." to player
+            else if event-block is trapped chest:
+                if {_owner} is set:
+                    if {_owner} is not uuid of player:
+                        cancel event
+                        message "타인의 상자에 접근할 수 없습니다." to player
+            else if event-block is furnace:
+                if {_owner} is set:
+                    if {_owner} is not uuid of player:
+                        cancel event
+                        message "타인의 화로에 접근할 수 없습니다." to player
+            else if event-block is brewing_stand:
+                if {_owner} is set:
+                    if {_owner} is not uuid of player:
+                        cancel event
+                        message "타인의 양조기에 접근할 수 없습니다." to player
+            else if "%event-block%" contains "door":
+                if {_owner} is set:
+                    if {_owner} is not uuid of player:
+                        cancel event
+            else if "%event-block%" contains "gate":
+                if {_owner} is set:
+                    if {_owner} is not uuid of player:
+                        cancel event
+            else if event-block is cauldron:
+                if {_owner} is set:
+                    if {_owner} is not uuid of player:
+                        cancel event
+                        message "타인의 가마솥에 접근할 수 없습니다." to player
+                        #TODO: 가마솥 양동이를 들었을 때만 뜨도록 교체
+            else if event-block is lava_cauldron:
+                if {_owner} is set:
+                    if {_owner} is not uuid of player:
+                        cancel event
+                        message "타인의 가마솥에 접근할 수 없습니다." to player
+            else if event-block is barrel:
+                if {_owner} is set:
+                    if {_owner} is not uuid of player:
+                        cancel event
+                        message "타인의 통에 접근할 수 없습니다." to player
+            #else if event-block is composter:
+                #if {_owner} is set:
+                    #if {_owner} is not uuid of player:
+                        #cancel event
+                        #message "타인의 통에 접근할 수 없습니다." to player
+            else if event-block is dispenser:
+                if {_owner} is set:
+                    if {_owner} is not uuid of player:
+                        cancel event
+                        message "타인의 발사기에 접근할 수 없습니다." to player
+            else if event-block is dropper:
+                if {_owner} is set:
+                    if {_owner} is not uuid of player:
+                        cancel event
+                        message "타인의 공급기에 접근할 수 없습니다." to player
+            else if event-block is lectern:
+                if {_owner} is set:
+                    if {_owner} is not uuid of player:
+                        cancel event
+                        message "타인의 독서대에 접근할 수 없습니다." to player
+            else if event-block is anvil:
+                if {_owner} is set:
+                    if {_owner} is not uuid of player:
+                        cancel event
+                        message "타인의 모루에 접근할 수 없습니다." to player
+            else if event-block is damaged_anvil:
+                if {_owner} is set:
+                    if {_owner} is not uuid of player:
+                        cancel event
+                        message "타인의 모루에 접근할 수 없습니다." to player
+            else if event-block is chipped_anvil:
+                if {_owner} is set:
+                    if {_owner} is not uuid of player:
+                        cancel event
+                        message "타인의 모루에 접근할 수 없습니다." to player
+            else if event-block is smoker:
+                if {_owner} is set:
+                    if {_owner} is not uuid of player:
+                        cancel event
+                        message "타인의 훈연기에 접근할 수 없습니다." to player
+            else if event-block is blast_furnace:
+                if {_owner} is set:
+                    if {_owner} is not uuid of player:
+                        cancel event
+                        message "타인의 용광로에 접근할 수 없습니다." to player
+            else if event-block is enchanting_table:
+                if {_owner} is set:
+                    if {_owner} is not uuid of player:
+                        cancel event
+                        message "타인의 마법 부여대에 접근할 수 없습니다." to player
+            else if event-block is hopper:
+                if {_owner} is set:
+                    if {_owner} is not uuid of player:
+                        cancel event
+                        message "타인의 호퍼에 접근할 수 없습니다." to player
+            else if event-block is lever:
+                if {_owner} is set:
+                    if {_owner} is not uuid of player:
+                        cancel event
+            else if event-block is oak_button:
+                if {_owner} is set:
+                    if {_owner} is not uuid of player:
+                        cancel event
+            else if event-block is stone_button:
+                if {_owner} is set:
+                    if {_owner} is not uuid of player:
+                        cancel event
+            else if event-block is cave_vines_plant:
+                if {_owner} is set:
+                    if {_owner} is not uuid of player:
+                        cancel event
+            else if event-block is sweet_berry_bush:
+                if {_owner} is set:
+                    if {_owner} is not uuid of player:
+                        cancel event
+            else if event-block is pumpkin:
+                if {_owner} is set:
+                    if {_owner} is not uuid of player:
+                        cancel event
+                        message "타인의 호박에 접근할 수 없습니다." to player
+                        #TODO: 가위를 들고 있을 때만 뜨도록
+
+
+#TODO: 발판 밟으면 캔슬되는 거
+
+
+#엔티티 상대로 우클릭
+
+
+on rightclick:
+    set {_test} to false
+    set {_chunk} to chunk at event-entity
+    set {_owner} to {owned_chunk::%{_chunk}%}
+    loop {partylist::%{_owner}%::*}:
+        if {_test} is true:
+            exit loop
+        if {_owner} is {party::%loop-value-1%::owner}:
+            loop {party::%loop-value-1%::members::*}:
+                if uuid of player is loop-value-2:
+                    set {_test} to true
+                    exit loop
+                else:
+                    set {_test} to false
     if {_test} is false:
-        if event-block is chest:
-            if {_owner} is not uuid of player:
-                cancel event
-                message "타인의 상자는 열 수 없습니다." to player
-        else if event-block is trapped chest:
-            if {_owner} is not uuid of player:
-                cancel event
-                message "타인의 상자는 열 수 없습니다." to player
-        else if event-block is furnace:
-            if {_owner} is not uuid of player:
-                cancel event
-                message "타인의 화로는 열 수 없습니다." to player
+        if event-entity is item frame:
+            if {_owner} is set:
+                if {_owner} is not uuid of player:
+                    cancel event
+                    message "타인의 액자에 접근할 수 없습니다." to player
+        else if event-entity is sheep:
+            if {_owner} is set:
+                if {_owner} is not uuid of player:
+                    cancel event
+                    message "타인의 양에 접근할 수 없습니다." to player
+                    #TODO: 가위를 들고 있을 때만 동작하도록
+        #TODO: 타인의 동물에 먹이를 줄 수 없도록. feed 키워드가 있나?
 
 
 
+on vehicle enter:
+    #FIXME: event-entity가 유저인 거 같음
+    #특정 엔티티만 탑승 제한 거는 게 안 되는 거 같음
+    #vehicle의 위치를 받아야 하는데 사람이 받음
+
+    set {_test} to false
+    set {_chunk} to chunk at entity
+    set {_owner} to {owned_chunk::%{_chunk}%}
+    loop {partylist::%{_owner}%::*}:
+        if {_test} is true:
+            exit loop
+        if {_owner} is {party::%loop-value-1%::owner}:
+            loop {party::%loop-value-1%::members::*}:
+                if uuid of event-entity is loop-value-2:
+                    set {_test} to true
+                    exit loop
+                else:
+                    set {_test} to false
+    event-entity is player
+    if {_test} is false:
+        if {_owner} is set:
+            if {_owner} is not uuid of event-entity:
+                #임시 비활성
+                cancel event
+                message "test" to player
+
+on vehicle damage:
+    
+
+
+
+
+
+on damage:
+    set {_test} to false
+    set {_chunk} to chunk at victim
+    set {_owner} to {owned_chunk::%{_chunk}%}
+    damager is player
+    loop {partylist::%{_owner}%::*}:
+        if {_test} is true:
+            exit loop
+        if {_owner} is {party::%loop-value-1%::owner}:
+            loop {party::%loop-value-1%::members::*}:
+                if uuid of damager is loop-value-2:
+                    set {_test} to true
+                    exit loop
+                else:
+                    set {_test} to false
+    if {_test} is false:
+        if victim is animal:
+            if {_owner} is set:
+                if {_owner} is not uuid of damager:
+                    cancel event
+                    send action bar "&c경고! &e타인의 땅에서 동물을 해칠 수 없습니다!" to damager
+        else if victim is item frame:
+            if {_owner} is set:
+                if {_owner} is not uuid of damager:
+                    cancel event
+                    send action bar "&c경고! &e타인의 아이템액자에 접근할 수 없습니다!" to damager
+
+
+on break of item frame:
+    set {_test} to false
+    set {_chunk} to chunk at event-entity
+    set {_owner} to {owned_chunk::%{_chunk}%}
+    loop {partylist::%{_owner}%::*}:
+        if {_test} is true:
+            exit loop
+        if {_owner} is {party::%loop-value-1%::owner}:
+            loop {party::%loop-value-1%::members::*}:
+                if uuid of player is loop-value-2:
+                    set {_test} to true
+                    exit loop
+                else:
+                    set {_test} to false
+    if {_test} is false:
+        if {_owner} is set:
+            if {_owner} is not uuid of player:
+                if "%item of event-entity%" contains "air":
+                    cancel event
+
+
+
+
+
+
+
+
+
+
+
+command /name [<text>]:
+    trigger:
+        #TEST command
+        if player is op:
+            set {_test} to {nick::%arg 1%}
+            message "%{_test}%" to player
