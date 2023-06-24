@@ -8,7 +8,14 @@ command /broadcast <text>:
     permission: skript.example.broadcast
     description: Broadcasts a message to everybody.
     trigger:
-        broadcast arg-text
+        broadcast ""
+        broadcast ""
+        broadcast ""
+        broadcast "&6[&4공지&6] &a%arg-text%"
+        broadcast ""
+        broadcast ""
+        broadcast ""
+
 
 #
 # A simple /home command that allows players to set, remove and travel to homes.
