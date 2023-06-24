@@ -9,7 +9,7 @@ command /land [<text>]:
                     if arg 1 is not set:
                         set {_chunk} to chunk at player
                         message "현재 청크: (%{_chunk}%의 x 좌표, %{_chunk}%의 z 좌표)" to player
-                        message "&e토지 구매를 희망할 시 &f/land buy&e를 입력해주세요." to player
+                        message "&e토지 구매를 희망할 시 &f/land buy&e를 입력해주세요.&7(필요 재화는 다이아 1개이며 판매 시 재화 회수가 불가능합니다!)" to player
                     else if arg 1 is "buy":
                         if player has 1 diamond:
                             remove 1 diamond from player
@@ -17,11 +17,11 @@ command /land [<text>]:
                             set {owned_chunk::%{_chunk}%} to uuid of player
                             message "&e땅 구매 완료!" to player
                         else:
-                            message "다이아몬드가 부족합니다." to player
+                            message "&4다이아몬드가 부족합니다." to player
                 else if {_owner} is set:
                     if arg 1 is not set:
                         message "현재 청크: (%{_chunk}%의 x 좌표, %{_chunk}%의 z 좌표)" to player
-                        message "&e토지 판매를 희망할 시 &f/land sell&e를 입력해주세요." to player
+                        message "&e토지 판매를 희망할 시 &f/land sell&e를 입력해주세요.&7(토지 판매 시 재화 회수가 불가능합니다!)" to player
                     else if arg 1 is "sell":
                         if {owned_chunk::%{_chunk}%} is uuid of player:
                             set {_chunk} to chunk at player
@@ -46,7 +46,7 @@ on place:
     loop {partylist::%{_owner}%::*}:
         if {_test} is true:
             exit loop
-        if {_owner} is {party::%loop-value-1%::owner}:
+        else:
             loop {party::%loop-value-1%::members::*}:
                 if uuid of player is loop-value-2:
                     set {_test} to true
@@ -69,7 +69,7 @@ on break:
     loop {partylist::%{_owner}%::*}:
         if {_test} is true:
             exit loop
-        if {_owner} is {party::%loop-value-1%::owner}:
+        else:
             loop {party::%loop-value-1%::members::*}:
                 if uuid of player is loop-value-2:
                     set {_test} to true
@@ -83,8 +83,24 @@ on break:
                 cancel event
                 message "타인의 땅에서 블록을 파괴할 수 없습니다." to player
 
-
-
+on stepping on a pressure plate:
+    set {_test} to false
+    set {_chunk} to chunk at event-block
+    set {_owner} to {owned_chunk::%{_chunk}%}
+    loop {partylist::%{_owner}%::*}:
+        if {_test} is true:
+            exit loop
+        else:
+            loop {party::%loop-value-1%::members::*}:
+                if uuid of player is loop-value-2:
+                    set {_test} to true
+                    exit loop
+                else:
+                    set {_test} to false
+    if {_test} is false:
+        if {_owner} is set:
+            if {_owner} is not uuid of player:
+                cancel event
 
 
 on rightclick:
@@ -94,7 +110,7 @@ on rightclick:
     loop {partylist::%{_owner}%::*}:
         if {_test} is true:
             exit loop
-        if {_owner} is {party::%loop-value-1%::owner}:
+        else:
             loop {party::%loop-value-1%::members::*}:
                 if uuid of player is loop-value-2:
                     set {_test} to true
@@ -229,8 +245,13 @@ on rightclick:
                         message "타인의 호박에 접근할 수 없습니다." to player
                         #TODO: 가위를 들고 있을 때만 뜨도록
 
+            else if event-block is cake:
+                if {_owner} is set:
+                    if {_owner} is not uuid of player:
+                        cancel event
 
-#TODO: 발판 밟으면 캔슬되는 거
+#FIXME: 케이크 안 됨
+
 
 
 #엔티티 상대로 우클릭
@@ -243,7 +264,7 @@ on rightclick:
     loop {partylist::%{_owner}%::*}:
         if {_test} is true:
             exit loop
-        if {_owner} is {party::%loop-value-1%::owner}:
+        else:
             loop {party::%loop-value-1%::members::*}:
                 if uuid of player is loop-value-2:
                     set {_test} to true
@@ -256,44 +277,40 @@ on rightclick:
                 if {_owner} is not uuid of player:
                     cancel event
                     message "타인의 액자에 접근할 수 없습니다." to player
-        else if event-entity is sheep:
+        else if event-entity is animal:
             if {_owner} is set:
                 if {_owner} is not uuid of player:
                     cancel event
-                    message "타인의 양에 접근할 수 없습니다." to player
+                    #말 타는 것도 방지됨
                     #TODO: 가위를 들고 있을 때만 동작하도록
-        #TODO: 타인의 동물에 먹이를 줄 수 없도록. feed 키워드가 있나?
 
 
 
-on vehicle enter:
+#on vehicle enter:
     #FIXME: event-entity가 유저인 거 같음
     #특정 엔티티만 탑승 제한 거는 게 안 되는 거 같음
     #vehicle의 위치를 받아야 하는데 사람이 받음
 
-    set {_test} to false
-    set {_chunk} to chunk at entity
-    set {_owner} to {owned_chunk::%{_chunk}%}
-    loop {partylist::%{_owner}%::*}:
-        if {_test} is true:
-            exit loop
-        if {_owner} is {party::%loop-value-1%::owner}:
-            loop {party::%loop-value-1%::members::*}:
-                if uuid of event-entity is loop-value-2:
-                    set {_test} to true
-                    exit loop
-                else:
-                    set {_test} to false
-    event-entity is player
-    if {_test} is false:
-        if {_owner} is set:
-            if {_owner} is not uuid of event-entity:
+    #set {_test} to false
+    #set {_chunk} to chunk at entity
+    #set {_owner} to {owned_chunk::%{_chunk}%}
+    #loop {partylist::%{_owner}%::*}:
+        #if {_test} is true:
+            #exit loop
+        #else:
+            #loop {party::%loop-value-1%::members::*}:
+                #if uuid of event-entity is loop-value-2:
+                    #set {_test} to true
+                    #exit loop
+                #else:
+                    #set {_test} to false
+    #event-entity is player
+    #if {_test} is false:
+        #if {_owner} is set:
+            #if {_owner} is not uuid of event-entity:
                 #임시 비활성
-                cancel event
-                message "test" to player
-
-on vehicle damage:
-    
+                #cancel event
+                #message "test" to player
 
 
 
@@ -307,7 +324,7 @@ on damage:
     loop {partylist::%{_owner}%::*}:
         if {_test} is true:
             exit loop
-        if {_owner} is {party::%loop-value-1%::owner}:
+        else:
             loop {party::%loop-value-1%::members::*}:
                 if uuid of damager is loop-value-2:
                     set {_test} to true
@@ -334,7 +351,7 @@ on break of item frame:
     loop {partylist::%{_owner}%::*}:
         if {_test} is true:
             exit loop
-        if {_owner} is {party::%loop-value-1%::owner}:
+        else:
             loop {party::%loop-value-1%::members::*}:
                 if uuid of player is loop-value-2:
                     set {_test} to true
