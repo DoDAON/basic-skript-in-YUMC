@@ -10,7 +10,8 @@ on command:
 			cancel event
 
 
-
+#every 10 ticks:
+	#execute console command "/minecraft:kill @e[type=minecraft:villager]"
 
 on break of item frame:
 	if player's world is "campus":
@@ -53,6 +54,26 @@ on damage:
 			cancel event
 
 
+# 자원월드 주민 죽이는 커맨드
+# rg info 해당 월드 flag 로 스폰은 막음 -> 기존에 존재하는 주민 및 좀비주민 제거
+every 10 ticks:
+	loop all entities:
+		if loop-entity's world is "recourcemyland":
+			if loop-entity is villager:
+				kill loop-entity
+			else if loop-entity is zombie villager:
+				kill loop-entity
+		
+		else if loop-entity's world is "world":
+			if loop-entity is villager:
+				kill loop-entity
+			else if loop-entity is zombie villager:
+				kill loop-entity
+
+
+
+
+
 
 on shoot:
 	if shooter's chestplate is elytra:
@@ -65,6 +86,11 @@ on shoot:
 on consume of chorus fruit:
 	cancel event
 
+
+
+on spawn of zombie:
+	if name of event-entity contains "villager":
+		cancel event
 
 on spawn of chicken:
 	if event-entity's world is "campus":

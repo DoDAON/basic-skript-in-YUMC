@@ -9,7 +9,6 @@ on join:
     else:
         set join message to "&a&l[+] &r%player%&r&7(%player%)&e님의 등장!"
 
-
     set {_ismember} to text from "http://mc.yu.ac.kr/ismember.php?uuid=%uuid of player%"
     if "%{_ismember}%" contains "YESYESYES":
 

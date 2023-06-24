@@ -4,11 +4,17 @@ command /cl:
         send "&e/cl &7- 명령어 목록을 확인합니다" to player
         send "&e/1 &7- 전체 채팅 모드로 전환합니다 " to player
         send "&e/2 &7- 주변 채팅 모드로 전환합니다 " to player
+        send "&e[[채팅내용]] &7- 채팅을 영어 그대로 전달합니다. " to player
         send "&e/land &7- 토지 구매 " to player
         send "&e/party &7- 파티 생성 및 관리" to player
         send "&e/s &7- 캠퍼스 스폰으로 이동" to player
         send "&e/sh &7- 자신의 홈을 지정합니다 " to player
-        send "&e/h &7- 자신의 홈으로 이동합니다 " to player
+        send "&e/hs &7- 홈 커맨드 안내 " to player
+        send "&e/h1, /h2 &7- 자신의 홈으로 이동합니다. " to player
         send "&e/trash &7- 쓰레기통 열기 " to player
         send "&e/crawl &7- 엎드리기 " to player
         send "&e/sit &7- 앉기 " to player
+        send "&e/spin &7- 스핀돌기 " to player
+        send "&e/sort &7- 창고 자동정리 " to player
+        send "&e/tr &7- 찹트리 활성/비활성 " to player
+        send "&e/shop &7- 공용 주민상점 방문 " to player
