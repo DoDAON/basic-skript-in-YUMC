@@ -13,5 +13,5 @@ YUMC에서 필요로 하는 스크립트 구상
 - Bulletin Board System(게시판 시스템): Reorganize existing system to make it more manageable
 
 
-## etc
+## bar.sk
 鏝 is converted to an image on the server, showing a diamond shape.
