@@ -30,3 +30,7 @@ on region enter:
     #캠퍼스 -> 야생
     #else if "%region at player%" contains "dokdo":
         #teleport player to spawn of "world"
+
+command /shop:
+    trigger:
+        execute console command "/warp goShopVilagerJungdo %player%"
