@@ -3,7 +3,7 @@ function randomLocation(p: player):
     set {chunk::%{_p}%} to chunk at {_loc::new}
     set {location::%{_p}%} to {_loc::new}
 
-# contains "pdokdo"를 "dokdo"로 교체하면 정상적용
+
 
 on region enter:
     if player's world is "campus":
@@ -22,4 +22,18 @@ on region enter:
                                 delete {location::%player%}
                                 wait 1 ticks
                                 stop loop
-                            
+        
+        else if "%region at player%" contains "resourceland":
+            set {_loc::old} to player's location
+            while player's location is {_loc::old}:
+                set {_loc::new} to location(random number between -10000 and 10000, 0, random number between -10000 and 10000, world "recourcemyland")
+                set {location::%player%} to {_loc::new}
+                loop blocks above {location::%player%}:
+                    if loop-block and block above loop-block and block 30 above loop-block are air:
+                        if block under loop-block is not air:
+                            set {location::%player%} to location of loop-block
+                            teleport player to {location::%player%}
+                            delete {chunk::%player%}
+                            delete {location::%player%}
+                            wait 1 ticks
+                            stop loop
