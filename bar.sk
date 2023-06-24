@@ -2,6 +2,10 @@ every 10 ticks:
     remove bossbar "topbar"
     loop all players:
         set {_chunk} to chunk at loop-player
+        set {_player} to uuid of loop-player
+        #remove bossbar "pegaBar%loop-player%"
+        if loop-player is op:
+            create bossbar titled "&b광물 : &f%{pegaMiner::%{_player}%}%&b鏝   &e농사 : &f%{pegaFarm::%{_player}%}%&e鏝   &a낚시 : &f%{pegaFishing::%{_player}%}%&2鏝   &d수렵 : &f%{pegaHunting::%{_player}%}%&d鏝" and id "pegaBar%loop-player%" for loop-player with progress 100 with colors white
         if loop-player's world is "world":
             if {owned_chunk::%{_chunk}%} is set:
                 set {_username} to {owned_chunk::%{_chunk}%} parsed as offline player
@@ -13,6 +17,7 @@ every 10 ticks:
                 create bossbar titled "%{_bartitle}%" and id "topbar%loop-player%" for loop-player with progress 100 with colors white
             else:
                 remove bossbar "topbar%loop-player%"
+                
                 set {_chunk.data} to "%chunk at loop-player%"
                 replace all "chunk (" with "" in {_chunk.data}
                 replace all ") of " with "," in {_chunk.data}
@@ -20,10 +25,22 @@ every 10 ticks:
                 create bossbar titled "%{_bartitle}%" and id "topbar%loop-player%" for loop-player with progress 100 with colors white
         else if loop-player's world is "campus":
             remove bossbar "topbar%loop-player%"
+            
             set {_bartitle} to "&a 위치 : &b영남대학교 캠퍼스"
+            create bossbar titled "%{_bartitle}%" and id "topbar%loop-player%" for loop-player with progress 100 with colors white
+        else if  loop-player's world is "recourcemyland":
+            remove bossbar "topbar%loop-player%"
+            
+            set {_bartitle} to "&a 위치 : &b자원 월드"
             create bossbar titled "%{_bartitle}%" and id "topbar%loop-player%" for loop-player with progress 100 with colors white
         else:
             
             remove bossbar "topbar%loop-player%"
             set {_bartitle} to " "
             create bossbar titled "%{_bartitle}%" and id "topbar" for loop-player with progress 100 with colors white
+
+
+
+
+# topbar이름 : 위치 정보, 이름 정보
+# pegaBar이름 : 페가 정보 표시 (4개)
