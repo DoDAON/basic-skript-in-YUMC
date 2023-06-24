@@ -1,0 +1,69 @@
+on join:
+    set {_player} to uuid of player
+    # 페가 초기 세팅
+    if {pegaValue::%{_player}%} is not set:
+        # 페가 선언
+        set {pegaValue::%{_player}%} to true
+        # 광물 페가
+        set {pegaMiner::%{_player}%} to 0
+        # 농사 페가
+        set {pegaFarm::%{_player}%} to 0
+        # 낚시 페가
+        set {pegaFishing::%{_player}%} to 0
+        # 수렵 페가
+        set {pegaHunting::%{_player}%} to 0
+
+
+
+
+
+
+
+command /testPegaP [<integer>] [<integer>]:
+    trigger:
+        if player is op:
+            set {_pega} to arg 1
+            set {_player} to uuid of player
+            if arg 2 is 1:
+                add {_pega} to {pegaMiner::%{_player}%}
+            else if arg 2 is 2:
+                add {_pega} to {pegaFarm::%{_player}%}
+            else if arg 2 is 3:
+                add {_pega} to {pegaFishing::%{_player}%}
+            else if arg 2 is 4:
+                add {_pega} to {pegaHunting::%{_player}%}
+
+command /testPegaS [<integer>] [<integer>]:
+    trigger:
+        if player is op:
+            set {_pega} to arg 1
+            set {_player} to uuid of player
+            if arg 2 is 1:
+                subtract {_pega} from {pegaMiner::%{_player}%}
+            else if arg 2 is 2:
+                subtract {_pega} from {pegaFarm::%{_player}%}
+            else if arg 2 is 3:
+                subtract {_pega} from {pegaFishing::%{_player}%}
+            else if arg 2 is 4:
+                subtract {_pega} from {pegaHunting::%{_player}%}
+
+# switch / case 있는지 확인 <<< if else 보다 그게 나을듯 인티저는
+
+
+
+#TODO: 엔피시 생성
+# - 엔피시 클릭 시 인벤토리 열림
+# - 해당 아이템 좌클릭/우클릭 시 판매
+
+
+
+
+# 1. 페가 정보 나열 / / / /
+# 2. 위치 정보 / (칭호)이름? << 시스템 나올 거 대비
+# 3. (공지를 위한 보류자리)
+
+# 혹은 페가를 스코어박스에다가 처리를 할까? 고민
+# 1. 위치 정보 / 이름
+# 2. ???
+# 3. (공지를 위한 보류자리)
+# 이렇게 되는데 자리는 넉넉하다만 스코어박스가 편할까?
