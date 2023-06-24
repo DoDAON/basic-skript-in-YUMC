@@ -15,13 +15,16 @@ command /s:
 			execute console command "/spawn %player%"
 			message "&e■ 스폰으로 이동하였습니다" to player
 
+command /hs:
+	trigger:
+		message "&e사용법 : /h1, /h2" to player
 
-command /h:
+command /h1:
+	aliases: /h
 	trigger:
 		if player is sneaking:
 			message "&c■ 어딘가에 앉아서 사용할 수 없는 명령어입니다." to player
 			stop
-
 		if {home::%uuid of player%} is set:
 			if player is op:
 				set {_per} to 1
@@ -44,7 +47,20 @@ command /h:
 				wait 2 ticks
 				set {_chunk} to chunk at {home::%uuid of player%}
 				if {owned_chunk::%{_chunk}%} is set:
-					if {owned_chunk::%{_chunk}%} is not uuid of player:
+					if {owned_chunk::%{_chunk}%} is uuid of player:
+						set {_key} to true
+					else:
+						loop {partylist::%uuid of player%::*}:
+							if {_key} is true:
+								exit loop
+							else:
+								loop {party::%loop-value%::members::*}:
+									if {owned_chunk::%{_chunk}%} is loop-value-2:
+										set {_key} to true
+										exit loop
+									else:
+										set {_key} to false
+					if {_key} is false:
 						delete {home::%uuid of player%}
 						message "&4---------<경고>---------" to player
 						message "&4현재 집이 위치한 곳은 &e타인의 땅&4입니다." to player
@@ -54,22 +70,129 @@ command /h:
 		else:
 			message "&c■ 홈을 지정(/sh)해주세요." to player
 
-command /sh:
+command /h2:
+	aliases: /hh
+	trigger:
+		if player is sneaking:
+			message "&c■ 어딘가에 앉아서 사용할 수 없는 명령어입니다." to player
+			stop
+		if {home2::%uuid of player%} is set:
+			if player is op:
+				set {_per} to 1
+			if {major::%uuid of player%} is 8:
+				set {_per} to 1
+			if {_per} is not 1:
+				message "&b■ 3초 후 홈으로 이동합니다..." to player
+				send title "&b홈으로 이동 중" to player for 3 seconds with fadein 0 second and fade out 0 second
+				wait 1 seconds
+				send title "&b홈으로 이동 중." to player for 3 seconds with fadein 0 second and fade out 0 second
+				wait 1 seconds
+				send title "&b홈으로 이동 중.." to player for 3 seconds with fadein 0 second and fade out 0 second
+				wait 1 seconds
+			if player's vehicle is set:
+				message "&c■ 어딘가에 앉아서 사용할 수 없는 명령어입니다." to player
+				stop
+			else:
+				teleport player to {home2::%uuid of player%}
+				message "&b■ 당신의 홈에 도착했습니다." to player
+				wait 2 ticks
+				set {_chunk} to chunk at {home2::%uuid of player%}
+				if {owned_chunk::%{_chunk}%} is set:
+					if {owned_chunk::%{_chunk}%} is uuid of player:
+						set {_key} to true
+					else:
+						loop {partylist::%uuid of player%::*}:
+							if {_key} is true:
+								exit loop
+							else:
+								loop {party::%loop-value%::members::*}:
+									if {owned_chunk::%{_chunk}%} is loop-value-2:
+										set {_key} to true
+										exit loop
+									else:
+										set {_key} to false
+					if {_key} is false:
+						delete {home2::%uuid of player%}
+						message "&4---------<경고>---------" to player
+						message "&4현재 집이 위치한 곳은 &e타인의 땅&4입니다." to player
+						message "&4해당 위치의 Home이 사라졌습니다!!" to player
+						message "&a자신의 토지&f에서 Home을 지정하는 것을 권장하고 있습니다." to player
+						message "&4-----------------------" to player
+		else:
+			message "&c■ 홈을 지정(/sh)해주세요." to player
+
+command /sh [<integer>]:
 	trigger:
 		if "%player's world%" contains "world":
 			set {_x} to 0
 		else:
 			message "&c■ 해당 월드에서는 사용할 수 없는 명령어입니다." to player
 			stop
-		set {_chunk} to chunk at player
-		if {owned_chunk::%{_chunk}%} is set:
-			if {owned_chunk::%{_chunk}%} is not uuid of player:
+		if arg 1 is set:
+			set {_chunk} to chunk at player
+			set {_key} to false
+			if {owned_chunk::%{_chunk}%} is uuid of player:
+				set {_key} to true
+			else if {owned_chunk::%{_chunk}%} is not set:
+				set {_key} to true
+			else:
+				loop {partylist::%uuid of player%::*}:
+					if {_key} is true:
+						exit loop
+					else:
+						loop {party::%loop-value%::members::*}:
+							if {owned_chunk::%{_chunk}%} is loop-value-2:
+								set {_key} to true
+								exit loop
+							else:
+								set {_key} to false
+				
+			if {_key} is false:
 				message "&e타인의 토지에 홈을 지정할 수 없습니다!" to player	
 			else:
-				set {home::%uuid of player%} to player's location
-				message "&b■ 당신의 홈을 지정했습니다." to player
-
+				if arg 1 is 1:
+					set {home::%uuid of player%} to player's location
+					message "&b■ 당신의 홈(1)을 지정했습니다." to player
+				else if arg 1 is 2:
+					set {home2::%uuid of player%} to player's location
+					message "&b■ 당신의 홈(2)을 지정했습니다." to player
+		else:
+			message "&e사용법 : /sh 1, /sh 2" to player
 		
+
+
+
+command /tr [<text>]:
+	trigger:
+		if arg 1 is "on":
+			execute player command "/treefeller on"
+			message "&b찹트리가 활성화되었습니다." to player
+		else if arg 1 is "off":
+			execute player command "/treefeller off"
+			message "&4찹트리가 비활성화되었습니다." to player
+		else:
+			message "&a찹트리 명령어&f(Tree Feller)" to player
+			message "&e사용법 : /tr on, /tr off" to player
+
+
+command /접속일 [<text>]:
+	trigger:
+		if arg 1 is set:
+			set {_player} to HangulToUUID(arg 1)
+			set {_username} to {_player} parsed as offline player
+			execute player command "/seen %{_username}%"
+		else:
+			message "&e사용법 : &f/seen 유저한글이름" to player
+
+
+
+
+
+#on tab completer for "/tpi":
+	#loop all players:
+		#add loop-value to tab completions
+
+
 
 command /trash:
 	trigger:
@@ -90,12 +213,33 @@ command /jamsu:
 
 
 
+command /mysort [<text>]:
+	trigger:
+		if player is not op:
+			if arg 1 is "on":
+				execute player command "/sort on"
+				message "&b자동 정리가 활성화되었습니다." to player
+			else if arg 1 is "off":
+				execute player command "/sort off"
+				message "&4자동 정리가 비활성화되었습니다." to player
+			else:
+				message "사용법: /mysort on, /mysort off"
+		else if player is op:
+			if arg 1 is "on":
+				execute player command "/sort on"
+				message "&b자동 정리가 활성화되었습니다." to player
+			else:
+				execute player command "/sort"
 
 
 
 
-
-
+on command "/elevator create":
+	if {com::%player%} is not 1:
+		if player is not op:
+			cancel event
+		if player is op:
+			cancel event
 on command "/chest":
 	if {com::%player%} is not 1:
 		if player is not op:
