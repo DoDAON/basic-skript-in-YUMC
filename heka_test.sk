@@ -1,0 +1,50 @@
+command /hekatest <string> [<number>]:
+    permission: op
+    trigger:
+        if arg-1 is "delete":
+            make player execute command "/minecraft:kill @e[type=minecraft:block_display,limit=1,distance=..1.5]"
+            send "&a블럭 디스플레이 삭제 완료" to player
+        else:
+            set {_block} to arg-1 parsed as blockdata
+            set {_blocktype::*} to "%{_block}%" split at "["
+            if {_block} is a blockdata:
+                if arg-2 is not set:
+                    make player execute command "/execute align xyz run summon block_display ~ ~ ~ {block_state:{Name:""%{_blocktype::1}%""}}"
+                    send "&a블럭 디스플레이 생성 완료" to player
+                else:
+                    if arg-2 is 1:
+                        make player execute command "/execute align xyz run summon block_display ~ ~ ~ {block_state:{Name:""%{_blocktype::1}%""}}"
+                        send "&a블럭 디스플레이 생성 완료" to player
+                    else if arg-2 is 0.5:
+                        set {_scale} to arg-2
+                        set {_center} to 0.25
+                        make player execute command "/execute align xyz run summon block_display ~ ~%{_center}% ~ {block_state:{Name:""%{_blocktype::1}%""},transformation:{translation:[-%{_center}%f,-%{_center}%f,-%{_center}%f],left_rotation:[0f,0f,0f,1f],scale:[%{_scale}%f,%{_scale}%f,%{_scale}%f],right_rotation:[0f,0f,0f,1f]}}"
+                        send "&a블럭 디스플레이 생성 완료" to player
+                    else:
+                        set {_scale} to arg-2
+                        set {_center} to arg-2 / 2
+                        make player execute command "/execute align xyz run summon block_display ~ ~%{_center}% ~ {block_state:{Name:""%{_blocktype::1}%""},transformation:{translation:[-%{_center}%f,-%{_center}%f,-%{_center}%f],left_rotation:[0f,0f,0f,1f],scale:[%{_scale}%f,%{_scale}%f,%{_scale}%f],right_rotation:[0f,0f,0f,1f]}}"
+                        send "&a블럭 디스플레이 생성 완료" to player
+
+on rightclick with redstone block:
+    if player is op:
+        if "%player%" contains "Hekalonze":
+            if player is sneaking:
+                cancel event
+                set {_x} to x coordinate of location of event-block
+                set {_y} to y coordinate of location of event-block
+                set {_z} to z coordinate of location of event-block
+                set {_scale} to 3 
+
+                remove 0.5 from {_x}
+                add {_scale} to {_y}
+                remove 1 from {_y}
+                remove 0.5 from {_z}
+
+                message "%{_x}% %{_y}% %{_z}%" to player
+                set {_block} to "carved_pumpkin" parsed as blockdata
+                if {_block} is a blockdata:
+                    set {_blocktype::*} to "%{_block}%" split at "["
+                    
+                    set {_center} to {_scale} / 2
+                    make player execute command "/summon block_display %{_x}% %{_y}% %{_z}% {block_state:{Name:""%{_blocktype::1}%""},transformation:{translation:[-%{_center}%f,-%{_center}%f,-%{_center}%f],left_rotation:[0f,0f,0f,1f],scale:[%{_scale}%f,%{_scale}%f,%{_scale}%f],right_rotation:[0f,0f,0f,1f]}}"
