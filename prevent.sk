@@ -97,7 +97,12 @@ on spawn of chicken:
 		cancel event
 
 on spawn of wither:
-	cancel event
+	if event-entity's world is "campus":
+		cancel event
+	if event-entity's world is "world":
+		cancel event
+	if event-entity's world is "recourcemyland":
+		cancel event
 
 on spawn of wandering trader:
 	cancel event
