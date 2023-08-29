@@ -13,9 +13,29 @@ on join:
         # 수렵 페가
         set {pegaHunting::%{_player}%} to 0
 
+command /sell:
+    aliases: /판매, /페가상점
+    trigger:
+        open chest with 1 rows named "&0&0&0&2&r상점" to player
+        set slot 2 of current inventory of player to diamond named "&b광물 상점" with lore "&f광물 상점에 입장합니다."
+        set slot 3 of current inventory of player to wheat named "&e농사 상점" with lore "&f농사 상점에 입장합니다."
+        set slot 4 of current inventory of player to skull of player named "&f페가 상점 리스트"
+        set slot 5 of current inventory of player to wheat named "&a낚시 상점" with lore "&f낚시 상점에 입장합니다."
+        set slot 6 of current inventory of player to wheat named "&d수렵 상점" with lore "&f수렵 상점에 입장합니다."
+
+
+on inventory click:
+    name of current inventory contains "&0&0&0&2"
+    cancel event
 
 
 
+
+command /testcheck [<text>]:
+    trigger:
+        set {_player} to HangulToUUID(arg 1)
+        if {pegaValue::%{_player}%} is not set:
+            message "t" to player
 
 
 

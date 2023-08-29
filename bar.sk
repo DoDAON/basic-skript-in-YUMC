@@ -3,8 +3,8 @@ every 10 ticks:
     loop all players:
         set {_chunk} to chunk at loop-player
         set {_player} to uuid of loop-player
-        #remove bossbar "pegaBar%loop-player%"
         if loop-player is op:
+            remove bossbar "pegaBar%loop-player%"
             create bossbar titled "&b광물 : &f%{pegaMiner::%{_player}%}%&b鏝   &e농사 : &f%{pegaFarm::%{_player}%}%&e鏝   &a낚시 : &f%{pegaFishing::%{_player}%}%&2鏝   &d수렵 : &f%{pegaHunting::%{_player}%}%&d鏝" and id "pegaBar%loop-player%" for loop-player with progress 100 with colors white
         if loop-player's world is "world":
             if {owned_chunk::%{_chunk}%} is set:

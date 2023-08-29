@@ -6,7 +6,7 @@ command /s:
 			wait 1 seconds
 			send title "&e스폰으로 이동 중." to player for 3 seconds with fadein 0 second and fade out 0 second
 			wait 1 seconds
-			send title "&e스폰으로 이동 중." to player for 3 seconds with fadein 0 second and fade out 0 second
+			send title "&e스폰으로 이동 중.." to player for 3 seconds with fadein 0 second and fade out 0 second
 			wait 1 seconds
 		if player's vehicle is set:
 			message "&c■ 어딘가에 앉아서 사용할 수 없는 명령어입니다." to player

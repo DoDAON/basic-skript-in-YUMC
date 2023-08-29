@@ -15,6 +15,7 @@ command /party [<text>] [<text>] [<text>]:
                     add {_player} to {party::%{_party}%::members::*}
                     add {_party} to {partylist::%{_player}%::*}
                     add {party::%{_party}%} to {YUMCpartylist::*}
+                    add 1 to {partyIndex::%{_player}%}
                     message "파티 %{_party}%가 생성되었습니다!" to player
                 else:
                     message "%{_party}%의 이름을 가진 파티가 이미 존재합니다. 다른 이름으로 생성해주세요." to player
@@ -42,6 +43,7 @@ command /party [<text>] [<text>] [<text>]:
                                     if {partyaccept::%{_username}%} is "true":
                                         add {_player} to {party::%{_party}%::members::*}
                                         add {_party} to {partylist::%{_player}%::*}
+                                        add 1 to {partyIndex::%{_player}%}
                                         message "플레이어 %arg 3%(이)가 파티 %{_party}%에 추가되었습니다!" to player
                                         message "당신은 파티 %{_party}%에 추가되었습니다!" to {_username}
                                         delete {partyaccept::%{_username}%}
@@ -167,11 +169,13 @@ command /party [<text>] [<text>] [<text>]:
         #파티장 양도 /party handover [파티이름] [유저 한글 이름] /// 커맨드 실행 시 실행자가 파티장인지 확인해야 함
         else if arg 1 is "handover":
             if arg 3 is set:
-                set {_party} to arg 2 # 만약에 파티 리스트 돌렸는데 자기 파티 아니면 안 되게
+                # 만약에 파티 리스트 돌렸는데 자기 파티 아니면 안 되게
+                set {_party} to arg 2 
                 set {_name} to HangulToUUID(arg 3)
                 loop {partylist::%{_name}%::*}:
                     if {_party} is loop-value:
                         set {_key} to true
+                        exit loop
                     else:
                         set {_key} to false
                 if {_key} is true:
@@ -183,7 +187,7 @@ command /party [<text>] [<text>] [<text>]:
                             else:
                                 set {_key2} to false
                         if {_key2} is true:
-                            set {party::%{_party}%::owner} to arg 3
+                            set {party::%{_party}%::owner} to {_name}
                             message "성공적으로 파티장 양도에 성공했습니다." to player
                         else:
                             message "파티에 존재하지 않는 유저입니다!."
