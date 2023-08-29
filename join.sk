@@ -6,12 +6,19 @@ on join:
 
     if {nick::%uuid of player%} is set:
         set join message to "&a&l[+] &r%{nick::%uuid of player%}%&r&7(%player%)&e님의 등장!"
+        set {_player} to uuid of player
+        if {partylist::%{_player}%::*} is set:
+            if {partyIndex::%{_player}%} is not set:
+                set {partyIndex::%{_player}%} to 0
+            loop {partylist::%{_player}%::*}:
+                add 1 to {_index}
+            if {partyIndex::%{_player}%} is not {_index}:
+                set {partyIndex::%{_player}%} to {_index}
     else:
         set join message to "&a&l[+] &r%player%&r&7(%player%)&e님의 등장!"
 
     set {_ismember} to text from "http://mc.yu.ac.kr/ismember.php?uuid=%uuid of player%"
     if "%{_ismember}%" contains "YESYESYES":
-
         set {ismember1::%uuid of player%} to 1
         message "&a■ 허가된 플레이어의 입장을 환영합니다!" to player
         message "&a■ /cl 로 명령어를 확인하실 수 있습니다." to player
@@ -28,7 +35,7 @@ on join:
         stop
 	
 on quit:
-	if {nick::%uuid of player%} is set:
-		set quit message to "&c&l[-] &r%{nick::%uuid of player%}%&r&7(%player%)&e님의 퇴장!"
-	else:
-		set quit message to "&c&l[-] &r%player%&r&7(%player%)&e님의 퇴장!"
+    if {nick::%uuid of player%} is set:
+        set quit message to "&c&l[-] &r%{nick::%uuid of player%}%&r&7(%player%)&e님의 퇴장!"
+    else:
+        set quit message to "&c&l[-] &r%player%&r&7(%player%)&e님의 퇴장!"
