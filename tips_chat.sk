@@ -1,0 +1,16 @@
+every 20 minutes:
+    if {tipsIndex} is not set:
+        set {tipsIndex} to true
+        broadcast "&b[TIP] 홈페이지에서 다양한 정보, 규칙, 디스코드 주소 등을 확인해보세요! &f&n<link:http://mc.yu.ac.kr>서버 주소 확인하기<reset>"
+        wait 20 minutes
+        broadcast "&e[TIP] 유저 간 소통, 서버 소식은 디스코드에서 활발히 이루어지고 있어요! &f&n<link:https://discord.gg/yumc>디스코드 확인하기<reset>"
+        wait 20 minutes
+        broadcast "&a[TIP] 채팅창에 ""/cl""을 입력하여 서버에서 사용가능한 명령어를 확인해봐요!"
+        wait 20 minutes
+        broadcast "&e[TIP] YUMC 서버는 기본적으로 영어를 한글로 자동변환하고 있습니다. 영어를 치고 싶다면 다음과 같이 입력해주세요! &d[[&f하고 싶은 말&d]]"
+        wait 20 minutes
+        broadcast "&b[TIP] YUMC 영남대학교 메타버스 동아리에서 활동해보아요! 언제든 가입할 수 있으니 지금 상담해봐요~ &f&n<link:https://pf.kakao.com/_ZGKpxj>카톡채널과 대화하기<reset>"
+        wait 3 ticks
+        delete {tipsIndex}
+
+
