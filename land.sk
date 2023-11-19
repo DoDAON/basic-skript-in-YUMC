@@ -81,7 +81,6 @@ on break:
         if {_owner} is set:
             if {_owner} is not uuid of player:
                 cancel event
-                message "타인의 땅에서 블록을 파괴할 수 없습니다." to player
 
 on break:
     set {_test} to false

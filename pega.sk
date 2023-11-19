@@ -16,16 +16,17 @@ on join:
 command /sell:
     aliases: /판매, /페가상점
     trigger:
-        open chest with 1 rows named "&0&0&0&2&r상점" to player
-        set slot 2 of current inventory of player to diamond named "&b광물 상점" with lore "&f광물 상점에 입장합니다."
-        set slot 3 of current inventory of player to wheat named "&e농사 상점" with lore "&f농사 상점에 입장합니다."
-        set slot 4 of current inventory of player to skull of player named "&f페가 상점 리스트"
-        set slot 5 of current inventory of player to wheat named "&a낚시 상점" with lore "&f낚시 상점에 입장합니다."
-        set slot 6 of current inventory of player to wheat named "&d수렵 상점" with lore "&f수렵 상점에 입장합니다."
+        addInventory(1, player, "&0&0&0&2&r상점")
+        addSlotItem(2, player, diamond, "&b광물 상점" with lore "&f광물 상점에 입장합니다.")
+        addSlotItem(3, player, wheat, "&e농사 상점" with lore "&f농사 상점에 입장합니다.")
+        addSlotItem(4, player, skull of player, "&f페가 상점 리스트")
+        addSlotItem(5, player, wheat, "&a낚시 상점" with lore "&f낚시 상점에 입장합니다.")
+        addSlotItem(6, player, wheat, "&d수렵 상점" with lore "&f수렵 상점에 입장합니다.")
 
 
+#> 페가 클릭 방지
 on inventory click:
-    name of current inventory contains "&0&0&0&2"
+    name of current inventory contains "&0&0&0&2&r"
     cancel event
 
 
