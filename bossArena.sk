@@ -1,6 +1,11 @@
-#made by DoDAON from YUMC
-#github: https://github.com/DoDAON
-#mail: ekdhs402@naver.com
+# made by DoDAON from YUMC
+# github: https://github.com/DoDAON
+# mail: ekdhs402@naver.com
+
+#>include "AASKH_party.sk"
+#>include "AASKH_region.sk"
+#>include "AASKH_ui.sk"
+#>include "AASKH_stdlib.sk"
 
 
 #CHECK THIS OPTIONS
@@ -10,77 +15,6 @@ options:
     regionArena2 : "bossarenano2"
     entranceNPC : "보스아레나"
     exitNPC : "안내요원"
-
-# 인벤토리 추가 / 줄 수, 인벤토리 주체, 인벤토리 이름
-function addInventory(rows: integer, player: player, name: text):
-    open chest with {_rows} rows named "%{_name}%" to {_player}
-
-
-# 인벤토리 슬롯 추가 / 칸 인덱스, 인벤토리 주체, 인벤토리 아이템, 이름, 설명
-# can't use the player head
-function addSlotItem(slot: integer, player: player, item: item, prompt: text, lore: text):
-    set slot {_slot} of current inventory of {_player} to {_item} named "%{_prompt}%" with lore "%{_lore}%"
-
-
-#리전이름 / return true is that any player is in region
-function checkPlayerIn(rg: text) :: boolean:
-    loop all players:
-        if "%region at loop-value%" contains "%{_rg}%":
-            return true
-    return false
-
-
-#인덱스, 파티 이름/ return player -> to change UUID
-#하기 전에 파티장인지 확인
-function callPartyMember(index: integer, party: text) :: player:
-    return {party::%{_party}%::%{_index}%}
-
-
-function callUserParty(index: integer, player: player) :: text:
-    return {partylist::%{_player}%::%{_index}%}
-
-
-
-#오프라인 유저는 <none>으로 뜨는 버그가 있음... 어케 고침 ㄹㅇ...
-function uuidToUsername(id: text) :: offline player:
-    set {_player} to "%{_id}%" parsed as offline player
-    return {_player}
-
-
-#TODO: 되는지 확인
-#누가 시전했는지, 어느 파티, 좌표 3개, 리전 마지막 체크, 월드 체크
-function doTeleportMyParty(party: text, x: integer, y: integer, z: integer, rg: text, world: text):
-    set {_lastCheck} to checkPlayerIn({_rg})
-    if {_lastCheck} is false:
-        loop {party::%{_party}%::members::*}:
-            set {_player} to uuidToUsername(loop-value)
-            teleport {_player} to location({_x}, {_y}, {_z}, {_world})
-    else:
-        loop {party::%{_party}%::members::*}:
-            set {_player} to uuidToUsername(loop-value)
-            message "&4경고!! &r&e이미 다른 파티가 전투 중에 있습니다!" to {_player}
-
-
-#TODO: 되는지 확인
-#3초 쿨타임 인터페이스
-#시전자, 색깔, 장소(~~으로, ~~로)
-function waitInformation(player: player, color: text, togo: text):
-    message "%{_color}%■ 3초 후 %{_togo}% 이동합니다..." to {_player}
-    send title "%{_color}%%{_togo}% 이동 중" to {_player} for 3 seconds with fadein 0 second and fade out 0 second
-    wait 1 seconds
-    send title "%{_color}%%{_togo}% 이동 중." to {_player} for 3 seconds with fadein 0 second and fade out 0 second
-    wait 1 seconds
-    send title "%{_color}%%{_togo}% 이동 중.." to {_player} for 3 seconds with fadein 0 second and fade out 0 second
-    wait 1 seconds
-
-
-function setBlock(world: text, block: item, x: integer, y: integer, z: integer):
-    set block at location at {_x}, {_y}, {_z} in world "%{_world}%" to {_block}
-
-
-
-#on spawn of wither:
-    #if "%region at player%" contains {@regionArena1}:
 
 
 on rightclick:
@@ -112,7 +46,6 @@ on rightclick:
             
 
 
-#addSlotItem(8, player, compass, "&0&0&0&5&r&b귀환", "&7스폰으로 돌아갑니다.")
 
 on inventory click:
     if name of current inventory contains "&0&0&0&5&r":
@@ -123,7 +56,7 @@ on inventory click:
             close player's inventory
             execute console command "/spawn %player%"
         
-        #아레나 선택
+        #> 아레나 선택
         else if clicked item is iron sword named "&0&0&0&5&r&b아레나 1":
             close player's inventory
             addInventory(1, player, "&0&0&0&5&r&0함꼐 할 파티를 선택해주세요.")
@@ -144,7 +77,8 @@ on inventory click:
                 else:
                     addSlotItem({_slotIndex}, player, barrier, "&2&0&0&5&r&4%{_party}% / 2", "&e해당 파티의 파티장이 아닙니다.")
                 add 1 to {_slotIndex}
-        #나가기 선택
+        
+        #> 나가기 선택
         else if clicked item is lime stained glass pane named "&0&0&0&5&r&a돌아가자!!":
             close player's inventory
             message "&e■ 3초 후 스폰으로 이동합니다..." to player
@@ -162,8 +96,8 @@ on inventory click:
                 message "&e■ 스폰으로 이동하였습니다" to player
         else if clicked item is red stained glass pane named "&c잠시 머무르자":
             close player's inventory
-
-        #파티 선택
+        
+        #>파티 선택
         loop {partylist::%{_player}%::*}:
             if clicked item is book named "&1&0&0&5&r&b%loop-value% / 1":
                 loop {party::%loop-value-1%::members::*}:
@@ -171,7 +105,7 @@ on inventory click:
                     waitInformation({_player}, "&e", "1번 아레나로")
                     close {_player}'s inventory
                 wait 3 seconds
-                doTeleportMyParty(loop-value-1, -262.5, 95, -189.5, {@regionArena1}, {@thisWorld})
+                doTeleportMyParty(loop-value-1, -262.5, 95, -189.5, {@regionArena1}, {@thisWorld}, "&4경고!! &r&e이미 다른 파티가 전투 중에 있습니다!")
                 wait 1 ticks
                 loop {party::%loop-value-1%::members::*}:
                     set {_player} to uuidToUsername(loop-value-2)
@@ -190,7 +124,7 @@ on inventory click:
                     waitInformation({_player}, "&e", "2번 아레나로")
                     close {_player}'s inventory
                 wait 3 seconds
-                doTeleportMyParty(loop-value-1, 104.5, 83, 39.5, {@regionArena2}, {@thisWorld})
+                doTeleportMyParty(loop-value-1, 104.5, 83, 39.5, {@regionArena2}, {@thisWorld}, "&4경고!! &r&e이미 다른 파티가 전투 중에 있습니다!")
                 wait 1 ticks
                 loop {party::%loop-value-1%::members::*}:
                     set {_player} to uuidToUsername(loop-value-2)
@@ -204,22 +138,9 @@ on inventory click:
                         setBlock({@thisWorld}, soul sand, 59, 82, 6)
                         setBlock({@thisWorld}, soul sand, 59, 82, 4)
 
-#execute console command "/minecraft:effect give @e[type=minecraft:wither] minecraft:instant_health 10 120"
-
-#TODO: [3. 파티채팅(파티이름)] 도다온 : 이렇게 채팅, 주황색?????
 
 
-
-#위더 블록 부수기 보호 및 플레이어 블록 부수기 보호
-#밑에 리전은 월드로 바꾸셈
-#월드 전체를 블럭 부수기 금지로 하는 게 맞을듯
-
-
-#TODO: 위더 사람 없을 때 죽이기
-
-
-
-#FIXME: 219줄 event-block 외의 부수는 거 인식 안 됨. 구문 찾아
+#> 부수기 방지
 on break:
     if player is not op:
         if "%event-block%" does not contain "wither skeleton":
@@ -234,6 +155,7 @@ on break:
                 cancel event
 
 
+#> 설치 방지
 on place:
     if player is not op:
         if player's held item is not wither skeleton skull:
@@ -243,8 +165,9 @@ on place:
                 cancel event
 
 
-#지역 폭발 방지
-#전체 월드 방지는 rg info - flag로 설정해서 __global__로 할듯
+
+
+#> 지역 폭발 방지
 on explode:
     if "%region at player%" contains {@regionArena1}:
         cancel event
@@ -253,7 +176,7 @@ on explode:
 
 
 
-#TODO: 밸런스 맞춰서 경험치 지급 및 텍스트 수정
+#> 위더 처치 시 경험치 지급
 on death of wither:
     loop all players:
         if "%region at loop-value%" contains {@regionArena1}:
@@ -269,8 +192,7 @@ on death of wither:
 
 
 
-#이동 보호
-
+#> 이동 보호
 on command "/s":
     if player's world is {@thisWorld}:
         cancel event
