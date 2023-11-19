@@ -75,13 +75,13 @@ every 10 ticks:
 
 
 
-on shoot:
-	if shooter's chestplate is elytra:
-		if shooter is not op:
-			message "&c■ 겉날개를 입은 채로 폭죽이나 화살을 사용할 수 없습니다." to shooter
-			cancel event
-	if shooter' world is "flat":
-		cancel event
+#on shoot:
+	#if shooter's chestplate is elytra:
+		#if shooter is not op:
+			#message "&c■ 겉날개를 입은 채로 폭죽이나 화살을 사용할 수 없습니다." to shooter
+			#cancel event
+	#if shooter' world is "flat":
+		#cancel event
 
 on consume of chorus fruit:
 	cancel event
@@ -113,12 +113,12 @@ on spawn of phantom:
 on explode:
 	cancel event
 
-every 1 ticks:
-	loop all players:
-		if "%loop-player's world%" contains "end":
-			if loop-player is not op:
-				teleport loop-player to spawn of "world"
-				message "&c■ 아직 엔더 월드에 입장하실 수 없습니다." to loop-player
+#every 1 ticks:
+	#loop all players:
+		#if "%loop-player's world%" contains "end":
+			#if loop-player is not op:
+				#teleport loop-player to spawn of "world"
+				#message "&c■ 아직 엔더 월드에 입장하실 수 없습니다." to loop-player	
 
 on command "/plugins":
 	if player is not op:
