@@ -1,0 +1,238 @@
+# made by DoDAON from YUMC
+# github: https://github.com/DoDAON
+# mail: ekdhs402@naver.com
+# using vscode "Vskript" theme
+
+#>-----------------------------------------------------
+#> Chapter 0. 필요 Skript 파일
+#>-----------------------------------------------------
+#> Pre-Read : There isn't any concept about "include preprocessing". This is just that you should prepare the followed sk files
+
+#> 1. ui 헤더 : SHIFT + F 클릭 시 메뉴창 띠우고 리전 선택, 해당 리전은 컨텐츠 별로 설정
+#> 2. stdlib 헤더 : 사용자 검색용 기본 라이브러리
+
+#>include "AASKH_ui.sk"
+#>include "AASKH_stdlib.sk"
+
+
+#>-----------------------------------------------------
+#> Chapter 1. rg flag 설정 및 기타 world, region 사전설정
+#>-----------------------------------------------------
+
+#> Multiverse World Flag - {@dokdoworld} = Testdokkdo
+#> Region __global__ flag
+#> /rg flag -w "Testdokkdo" __global__ mob-spawning DENY
+#> /rg flag -w "Testdokkdo" __global__ deny-spawn [minecraft:slime]
+
+#> Region 1. 
+#> /rg flag ...
+
+#> Region 2. 
+#> /rg flag ...
+
+#> Region 3. 
+#> /rg flag ...
+
+#> Region 4. 
+#> /rg flag ...
+
+
+#> World Border Setting
+
+
+
+#>-----------------------------------------------------
+#> Chapter 2. options
+#>-----------------------------------------------------
+
+#> tpdokdoworld : 멀티버스에 정의된 독도 월드 이름
+#> regionNo1 : 첫 번째 region의 좌표 [현재 컨텐츠 : 독도 수비대]
+#> regionNo2 : 두 번째 `` [현재 컨텐츠 : 독도 주민센터]
+#> regionNo3 : 세 번째 `` [현재 컨텐츠 : 독도 지형지물]
+#> regionNo4 : 네 번째 `` [현재 컨텐츠 : 독도 해양생물]
+
+options:
+    dokdoworld: "Testdokkdo"
+    regionNo1: 275.5 40 -386.5
+    regionNo2: 285.5 25 -312.5
+    regionNo3: 264.5 25 -279.5
+    regionNo4: 358.5 25 -243.5
+
+
+
+
+#>-----------------------------------------------------
+#> Chapter 3. 인터랙트
+#>-----------------------------------------------------
+
+on inventory click:
+    if name of current inventory contains "&1&1&2&1":
+        #> 캠퍼스 월드 클릭 이벤트: 캠퍼스 월드(스폰) 이동
+        if clicked item is light blue concrete named "&1&1&2&1&r&9영남대학교 캠퍼스":
+            execute console command "/spawn %player%"
+
+
+
+        #> 독도 월드 >> 컨텐츠 클릭 이벤트 : 항구
+        else if clicked item is blue stained glass pane named "&1&1&2&1&r&b항구":
+            execute player command "/독도"
+            showTitleToPlayer("&e독도 월드에 오신 걸 환영합니다", player, 1 second, 1 second, 1 second)
+
+        #> 독도 월드 >> 컨텐츠 클릭 이벤트 : 독도 경비대
+        else if clicked item is green stained glass pane named "&1&1&2&1&r&e독도 경비대":
+            execute player command "/독도경비대"
+            wait 1 tick
+            facing2(player, location(270.5, 40, -386.5))
+            showTitleToPlayer("&b독도 경비대", player, 1 second, 1 second, 1 second)
+            wait 3 seconds
+            loop 300 times:
+                message " " to player
+            message "=======================================%nl%&a독도는 우리땅! &f경북지방경찰청 소속의 육상 경비 부대인 %nl%&e독도 경비대&f가 독도를 안전하게 지켜주고 있어요.%nl%=======================================" to player
+            play sound "ENTITY_EXPERIENCE_ORB_PICKUP" with volume 1 with pitch 1 to player
+
+        #> 독도 월드 >> 컨텐츠 클릭 이벤트 : 독도 주민센터
+        else if clicked item is green stained glass pane named "&1&1&2&1&r&e독도 주민센터":
+            execute player command "/독도주민센터"
+            wait 1 tick
+            facing2(player, location(299.5, 25, -312.5))
+            showTitleToPlayer("&b독도 주민센터", player, 1 second, 1 second, 1 second)
+            wait 3 seconds
+            loop 300 times:
+                message " " to player
+            message "=======================================%nl%작은 섬인 독도에 &a사람이 산다고? &f독도 해안가에 &e4층 건물이 %nl%&e있다는 사실 &f알고 계셨나요??%nl%=======================================" to player
+            play sound "ENTITY_EXPERIENCE_ORB_PICKUP" with volume 1 with pitch 1 to player
+
+        #> 독도 월드 >> 컨텐츠 클릭 이벤트 : 지형지물
+        else if clicked item is green stained glass pane named "&1&1&2&1&r&e지형지물":
+            execute player command "/독도지형지물"
+            wait 1 tick
+            facing2(player, location(273.5, 25, -274.5))
+            showTitleToPlayer("&b독도의 지형지물", player, 1 second, 1 second, 1 second)
+            wait 3 seconds
+            loop 300 times:
+                message " " to player
+            message "=======================================%nl%용암이 냉각되면서 수축해 만들어진 &e주상절리&f, 침식 작용에 의해%nl%생긴 &e파식대와 해식동, 시스택&f 등 &a다양한 지형지물&f을 볼 수%nl% 있어요.%nl%=======================================" to player
+            play sound "ENTITY_EXPERIENCE_ORB_PICKUP" with volume 1 with pitch 1 to player
+
+        #> 독도 월드 >> 컨텐츠 클릭 이벤트 : 해양생물
+        else if clicked item is green stained glass pane named "&1&1&2&1&r&e해양생물":
+            execute player command "/독도해양생물"
+            wait 1 tick
+            facing2(player, location(364.5, 25, -237.5))
+            showTitleToPlayer("&b독도의 해양생물", player, 1 second, 1 second, 1 second)
+            wait 3 seconds
+            loop 300 times:
+                message " " to player
+            message "=======================================%nl%인간 활동이 적은 &a조용한 공간인 독도&f, 한류와 난류가 만나 %nl%생성된 &e색다른 환경의 여러 해양생물&f을 발견할 수 있어요.%nl%=======================================%nl% %nl%&7(뒤쪽으로 섬을 등반할 수 있어요~)" to player
+            play sound "ENTITY_EXPERIENCE_ORB_PICKUP" with volume 1 with pitch 1 to player
+
+
+#>-----------------------------------------------------
+#> Chapter 4. UI
+#>-----------------------------------------------------
+
+#> 이벤트 UI 오픈 제스쳐
+on swap hand items:
+    if player is sneaking:
+        cancel event
+        play sound "BLOCK_NOTE_BLOCK_BELL" with volume 1 with pitch 1 to player
+        addInventory(5, player, "&1&1&2&1&r&0워프 메뉴")
+        addSlotItem(13, player, skull of player, "&1&1&2&1&r&b어디로 가볼까요?", "&f몸은 멀리 있어도 마음은 언제나 이곳에!%nl%&e메타버스 세상&f에서 마음껏 즐겨봐요%nl%&7제작 : 영남대학교 IT 동아리 YUMC")
+        addSlotItem(20, player, light blue concrete, "&1&1&2&1&r&9영남대학교 캠퍼스", "&e메타버스&f로 구현된 영남대학교 캠퍼스로!")
+        addSlotItem(24, player, grass block, "&1&1&2&1&r&a독도 월드", "&f자랑스러운 &e우리 땅 독도&f에 방문해봐요!")
+
+#> UI 클릭 이벤트 >> 새로운 UI 생성
+on inventory click:
+    if name of current inventory contains "&1&1&2&1":
+        #> 독도 월드 클릭 이벤트: 독도 이벤트맵 관련 특수 UI 호출
+        if clicked item is grass block named "&1&1&2&1&r&a독도 월드":
+            if player's world is not {@dokdoworld}:
+                close player's inventory
+                execute player command "/독도"
+                showTitleToPlayer("&e독도 월드에 오신 걸 환영합니다", player, 1 second, 1 second, 1 second)
+                message " %nl%&d워프메뉴 중 &a독도 월드&d 버튼을 눌러 독도의 여러 명소를 방문해봐요" to player
+            else:
+                close player's inventory
+                addInventory(6, player, "&1&1&2&1&r&0어디로 가볼까요?")
+                set {_uiOfDokdo::*} to 2, 10, 11, 12, 19, 20, 28, 32, 34, 42, 49, 50 and 51
+                loop {_uiOfDokdo::*}:
+                    addSlotItem(loop-value, player, lime stained glass pane, "&1&1&2&1&r&2독도", "&f원하는 장소를 골라봐요")
+                    addSlotItem(48, player, blue stained glass pane, "&1&1&2&1&r&b항구", "&f항구에서 독도 전경을%nl%&f둘러보아요")
+                    addSlotItem(41, player, green stained glass pane, "&1&1&2&1&r&e독도 경비대", "&f독도를 지키는 자랑스러운 우리나라 경비대!")
+                    addSlotItem(38, player, green stained glass pane, "&1&1&2&1&r&e해양생물", "&f독도는 다른 곳과 다른%nl%&f독도만의 생태계가 있어요")
+                    addSlotItem(14, player, green stained glass pane, "&1&1&2&1&r&e지형지물", "&f오랜 시간 함께한%nl%&f특별한 독도의 지형!")
+                    addSlotItem(21, player, green stained glass pane, "&1&1&2&1&r&e독도 주민센터", "&f작은 섬마을 독도에 사람이 산다구요??")
+
+
+#> 상단 보스바 안내 UI (SHIFT + F 상호작용 시 작동한다는 것을 안내)
+#> YUMC bar.sk 파일에 삽입
+#> every 10 ticks 의 중복적용이 서로 다른 타이밍에 나타나 비효율적인 UI를 만들어냄
+#> 독도 월드를 위한 안내 보스바
+#> remove bossbar "zdokdoBar%loop-player%"
+#> set {_bartitle} to "&a■독도 월드 &f: &bSHIFt + F&r&f로 이동해봐요"
+#> create bossbar titled "%{_bartitle}%" and id "zdokdoBar%loop-player%" for loop-player with progress 100 with colors white
+
+#>-----------------------------------------------------
+#> Chapter 5. 커맨드
+#>-----------------------------------------------------
+
+#> 독도 월드 이동 커맨드
+command /독도:
+    trigger:
+        execute console command "/mv tp %player% %{@dokdoworld}%"
+
+#> 독도 경비대 이동 커맨드
+command /독도경비대:
+    trigger:
+        execute console command "/tp %player% {@regionNo1}"
+
+#> 독도 주민센터 이동 커맨드
+command /독도주민센터:
+    trigger:
+        execute console command "/tp %player% {@regionNo2}"
+
+#> 독도 지형지물 이동 커맨드
+command /독도지형지물:
+    trigger:
+        execute console command "/tp %player% {@regionNo3}"
+
+#> 독도 해양생물 이동 커맨드
+command /독도해양생물:
+    trigger:
+        execute console command "tp %player% {@regionNo4}"
+
+
+
+#>-----------------------------------------------------
+#> Chapter 6. 보안
+#>-----------------------------------------------------
+
+
+#> 인벤토리 클릭 보안
+on inventory click:
+    name of current inventory contains "&1&1&2&1"
+    cancel event
+
+#> 블럭 파괴 보안
+on break:
+    player is not op
+    player's world is {@dokdoworld}
+    cancel event
+
+#> 블럭 설치 보안
+on place:
+    player is not op
+    player's world is {@dokdoworld}
+    cancel event
+
+#> 사망 방지 보안
+on damage:
+    victim is player
+    victim's world is {@dokdoworld}
+    cancel event
+
+#> 플레이어 허기 방지
+every 10 minute:
+    loop all players:
+        if loop-player's world is {@dokdoworld}:
+            apply potion of saturation to loop-player for 1 seconds

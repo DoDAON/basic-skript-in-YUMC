@@ -1,6 +1,7 @@
 every 10 ticks:
     remove bossbar "topbar"
     loop all players:
+        remove bossbar "pegaBar%loop-player%"
         set {_chunk} to chunk at loop-player
         set {_player} to uuid of loop-player
         if loop-player is op:
@@ -10,14 +11,16 @@ every 10 ticks:
             if {owned_chunk::%{_chunk}%} is set:
                 set {_username} to {owned_chunk::%{_chunk}%} parsed as offline player
                 remove bossbar "topbar%loop-player%"
+                remove bossbar "zdokdoBar%loop-player%"
                 set {_chunk.data} to "%chunk at loop-player%"
                 replace all "chunk (" with "" in {_chunk.data}
                 replace all ") of " with "," in {_chunk.data}
                 set {_bartitle} to "&a 위치 : &e%{nick::%{owned_chunk::%{_chunk}%}%}%&e님의 땅 &f(%{_chunk.data}%)"
                 create bossbar titled "%{_bartitle}%" and id "topbar%loop-player%" for loop-player with progress 100 with colors white
+
             else:
                 remove bossbar "topbar%loop-player%"
-                
+                remove bossbar "zdokdoBar%loop-player%"
                 set {_chunk.data} to "%chunk at loop-player%"
                 replace all "chunk (" with "" in {_chunk.data}
                 replace all ") of " with "," in {_chunk.data}
@@ -25,9 +28,22 @@ every 10 ticks:
                 create bossbar titled "%{_bartitle}%" and id "topbar%loop-player%" for loop-player with progress 100 with colors white
         else if loop-player's world is "campus":
             remove bossbar "topbar%loop-player%"
-            
+            remove bossbar "zdokdoBar%loop-player%"
             set {_bartitle} to "&a 위치 : &b영남대학교 캠퍼스"
             create bossbar titled "%{_bartitle}%" and id "topbar%loop-player%" for loop-player with progress 100 with colors white
+
+            #> 독도 월드를 위한 안내 보스바
+            set {_bartitle} to "&a■독도 월드 &f: &bSHIFt + F&r&f로 이동해봐요"
+            create bossbar titled "%{_bartitle}%" and id "zdokdoBar%loop-player%" for loop-player with progress 100 with colors white
+
+        else if loop-player's world is "Testdokkdo":
+            remove bossbar "topbar%loop-player%"
+            #> 독도 월드를 위한 안내 보스바
+            remove bossbar "zdokdoBar%loop-player%"
+            set {_bartitle} to "&a■독도 월드 &f: &bSHIFt + F&r&f로 이동해봐요"
+            create bossbar titled "%{_bartitle}%" and id "zdokdoBar%loop-player%" for loop-player with progress 100 with colors white
+
+
         else if  loop-player's world is "recourcemyland":
             remove bossbar "topbar%loop-player%"
             
