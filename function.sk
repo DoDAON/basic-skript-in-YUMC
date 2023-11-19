@@ -1,7 +1,0 @@
-function HangulToUUID(t:text) :: text:
-    loop {nick::*}:
-        if loop-value is {_t}:
-            set {_value} to loop-index
-            exit loop
-    return {_value}
-            
