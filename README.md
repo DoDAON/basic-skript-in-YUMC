@@ -12,6 +12,8 @@ YUMC에서 필요로 하는 스크립트 구상
 - Library improvements (bookshelf, book writing, book cover changes, etc.)
 - Bulletin Board System(게시판 시스템): Reorganize existing system to make it more manageable
 
+## Env
+Using vscode "Vskript" theme
 
 ## bar.sk
 鏝 is converted to an image on the server, showing a diamond shape.
