@@ -1,0 +1,15 @@
+# Skript Header File
+# About Region Functions
+
+# made by DoDAON from YUMC
+# github: https://github.com/DoDAON
+# mail: ekdhs402@naver.com
+
+#> 리전 내 플레이어 체크
+#> @return true : someone is in the region, false : no one is in the region
+#> @param rg region 이름
+function checkPlayerIn(rg: text) :: boolean:
+    loop all players:
+        if "%region at loop-value%" contains "%{_rg}%":
+            return true
+    return false

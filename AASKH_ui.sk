@@ -1,0 +1,60 @@
+# Skript Header File
+# About UI Functions
+
+# made by DoDAON from YUMC
+# github: https://github.com/DoDAON
+# mail: ekdhs402@naver.com
+
+
+#> 인벤토리 생성
+#> @param rows 인벤토리 줄 수
+#> @param player 인벤토리 주체(username)
+#> @param name 인벤토리 이름
+function addInventory(rows: integer, player: player, name: text):
+    open chest with {_rows} rows named "%{_name}%" to {_player}
+
+
+#> 인벤토리 슬롯 아이템 추가
+#> @param slot 칸 인덱스
+#> @param player 인벤토리 주체(username)
+#> @param item 표시할 아이템
+#> @param prompt 아이템 이름
+#> @param lore 아이템 설명
+function addSlotItem(slot: integer, player: player, item: item, prompt: text, lore: text):
+    set slot {_slot} of current inventory of {_player} to {_item} named "%{_prompt}%" with lore "%{_lore}%"
+
+
+#> NBT 태그 인벤토리 슬롯 아이템 추가
+#> @param slot 칸 인덱스
+#> @param player 인벤토리 주체(username)
+#> @param item 표시할 아이템
+#> @param prompt 아이템 이름
+#> @param lore 아이템 설명
+#> @param nbt nbt 태그
+#function addSlotNbtItem(slot: integer, player: player, item: item, prompt: text, lore: text, nbt: text):
+    #set slot {_slot} of current inventory of {_player} to {_item} named "%{_prompt}%" with lore "%{_lore}%" with nbt "%{_nbt}%"
+
+
+#> 이동 3초 딜레이 UI
+#> @param player username
+#> @param color 색상코드 "ex: &f, &a, ..."
+#> @param togo 이동할 장소 이름
+function waitInformation(player: player, color: text, togo: text):
+    message "%{_color}%■ 3초 후 %{_togo}% 이동합니다..." to {_player}
+    send title "%{_color}%%{_togo}% 이동 중" to {_player} for 3 seconds with fadein 0 second and fade out 0 second
+    wait 1 seconds
+    send title "%{_color}%%{_togo}% 이동 중." to {_player} for 3 seconds with fadein 0 second and fade out 0 second
+    wait 1 seconds
+    send title "%{_color}%%{_togo}% 이동 중.." to {_player} for 3 seconds with fadein 0 second and fade out 0 second
+    wait 1 seconds
+
+
+#> 화면 중앙 텍스트 전사
+#> @param prompt 전사할 내용(색코드 포함)
+#> @param player username
+#> @param sec 표시 시간 (구현 시 * second 와 같이 표현)
+#> @param fadein 입장 시간 (구현 시 * second 와 같이 표현)
+#> @param fadeOut 퇴장 시간 (구현 시 * second 와 같이 표현)
+
+function showTitleToPlayer(prompt: text, player: player, sec: timespan, fadeIn: timespan, fadeOut: timespan):
+    send title {_prompt} to {_player} for {_sec} with fadein {_fadeIn} and fadeout {_fadeOut}

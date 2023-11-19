@@ -1,0 +1,57 @@
+# Skript Header File
+# About Basic Minecraft Functions
+
+# made by DoDAON from YUMC
+# github: https://github.com/DoDAON
+# mail: ekdhs402@naver.com
+
+
+#> 한글 닉네임을 UUID로 변환
+#> requirements : Nickname System
+#> YUMC 서버와 통신, text from "YUMC_backserver_DB_site" 이후 {nick::%uuid of player%}에 담음
+#> @return 플레이어 uuid
+#> @param t 플레이어 한글 닉네임
+function HangulToUUID(t:text) :: text:
+    loop {nick::*}:
+        if loop-value is {_t}:
+            set {_value} to loop-index
+            exit loop
+    return {_value}
+
+
+#> UUID를 username으로 변환
+#> @return player username
+#> @param id uuid of player
+function uuidToUsername(id: text) :: offline player:
+    set {_player} to "%{_id}%" parsed as offline player
+    return {_player}
+
+
+#> 좌표 위치에 블록 생성
+#> @param world 작동시킬 월드 이름
+#> @param block 설치할 블록 이름
+#> @param x x좌표
+#> @param y y좌표
+#> @param z z좌표
+function setBlock(world: text, block: item, x: integer, y: integer, z: integer):
+    set block at location at {_x}, {_y}, {_z} in world "%{_world}%" to {_block}
+
+
+
+#> 출처 : https://www.koreaminecraft.net/plugin_lecture/2704259
+#> 좌표로 이동하면서 동시에 특정 엔티티 방향으로 Facing
+#> 아래 사용된 atan2() 함수는 아마 Skript에서 기본으로 제공해주는 함수일듯
+#> 탄젠트의 역함수 arctan(아크탄젠트)를 구현한 함수 (기울기 입력 -> 각도 return)
+#> @param e 엔티티 위치(가능한 한 tp 이후 엔티티의 위치를 지정하도록)
+#> @param l 바라볼 위치(location() 함수를 사용하여 하는 것이 좋음. 기준 좌표보다 2미터 위를 바라봄)
+function facing2(e: entity, l: location):
+    set {_loc} to location of {_e}
+    set {_x} to x location of {_l} - x location of {_loc}
+    set {_y} to y location of {_l} - y location of {_loc}
+    set {_z} to z location of {_l} - z location of {_loc}
+    set {_yaw.tan} to atan2({_x}, {_z})
+    set yaw of {_loc} to {_yaw.tan} - 90
+    set {_pit.dis} to ({_x} ^ 2 + {_z} ^ 2) ^ (1 / 2)
+    set {_pit.tan} to atan2({_pit.dis}, {_y})
+    set pitch of {_loc} to {_pit.tan} * -1
+    teleport {_e} at {_loc}

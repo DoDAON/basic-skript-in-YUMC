@@ -1,0 +1,46 @@
+# Skript Header File
+# About Party Functions
+
+# made by DoDAON from YUMC
+# github: https://github.com/DoDAON
+# mail: ekdhs402@naver.com
+
+
+#> requirements : YUMC party Skript File
+
+#>include "AASKH_region.sk"
+#>include "AASKH_stdlib.sk"
+
+#> 파티의 파티원 호출 함수
+#> @return 해당 파티의 n번째 파티원
+#> @param index 인덱스 번호
+#> @param party 파티 이름 
+function callPartyMember(index: integer, party: text) :: player:
+    return {party::%{_party}%::%{_index}%}
+
+#> 플레이어의 파티 호출 함수
+#> @return player의 n번째 파티
+#> @param index 인덱스 번호
+#> @param player 플레이어 이름(username)
+function callUserParty(index: integer, player: player) :: text:
+    return {partylist::%{_player}%::%{_index}%}
+
+
+#> 파티원 텔레포트 매서드
+#> @param party 파티명
+#> @param x x좌표
+#> @param y y좌표
+#> @param z z좌표
+#> @param rg region 이름 (불필요 시 공백, return false)
+#> @param world 목적지 월드 이름
+#> @param prompt 텔레포트 거절 메시지
+function doTeleportMyParty(party: text, x: integer, y: integer, z: integer, rg: text, world: text, prompt: text):
+    set {_lastCheck} to checkPlayerIn({_rg})
+    if {_lastCheck} is false:
+        loop {party::%{_party}%::members::*}:
+            set {_player} to uuidToUsername(loop-value)
+            teleport {_player} to location({_x}, {_y}, {_z}, {_world})
+    else:
+        loop {party::%{_party}%::members::*}:
+            set {_player} to uuidToUsername(loop-value)
+            message {_prompt} to {_player}
